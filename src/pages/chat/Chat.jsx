@@ -1,13 +1,8 @@
 import React, { useState, useEffect } from "react";
-import "./Chat.css"; // Import your custom CSS file
+import "./Chat.css";
 import axios from "axios";
 import { IoMdSend } from "react-icons/io";
-import PubNub from "pubnub";
-import { useLocation } from "react-router-dom";
-
-import { useUserContext } from "../../context/UserContext";
 import NavigationBar from "../landingPage/navbar/NavigationBar";
-
 import OpenAI from "openai";
 
 const openai = new OpenAI({
@@ -18,11 +13,6 @@ const openai = new OpenAI({
 const Chat = () => {
   const [messages, setMessages] = useState([]);
   const [inputValue, setInputValue] = useState("");
-
-  const { userInfo } = useUserContext();
-
-  const VITE_OPEN_API_KEY = import.meta.env.VITE_OPEN_API_KEY;
-
   const [previousConversation, setPreviousConversation] = useState("");
 
   const handleMessageSubmit = (e) => {
@@ -33,30 +23,56 @@ const Chat = () => {
     }
   };
 
+  const getSummary = async (text) => {
+    try {
+      const response = await openai.chat.completions.create({
+        model: "gpt-3.5-turbo", // or any suitable summarization model
+        messages: [
+          {
+            role: "system",
+            content: `Please summarize the following text and be careful about keeping medically relevant information and summarize it so it can be fed to another model as the past conversation: ${text}`,
+          },
+        ],
+      });
+      console.log("Summary Response from OpenAI:", response);
+
+      if (response.choices && response.choices.length > 0) {
+        return response.choices[0].message.content;
+      } else {
+        console.error("Failed to get summary from OpenAI's summarization API");
+        return ""; // Return an empty string if the summarization fails
+      }
+    } catch (error) {
+      console.error("Error getting summary:", error);
+      return ""; // Return an empty string in case of an error
+    }
+  };
+
   const sendMessage = async () => {
     const userMessage = inputValue;
     setInputValue("");
 
-    const messages = [
+    const summary = await getSummary(previousConversation);
+    console.log("Summary:", summary);
+
+    const newMessages = [
       {
         role: "system",
-        content: `You are a medical assistant. Your job is patient history taking. You are going to ask the patient about their symptoms and medical condition. Previous conversations: ${previousConversation}`,
+        content: `You are a medical assistant. Your job is patient history taking. You are going to ask the patient about their symptoms and medical condition. Previous conversations: ${summary}`,
       },
       { role: "user", content: userMessage },
     ];
-
-    // Log the messages before making the API call
-    console.log("Messages being sent to GPT-3 API:", messages);
-    console.log("Previous conversation:", previousConversation);
-
+    console.log("Message being sent to GPT:", newMessages);
     try {
       const response = await openai.chat.completions.create({
         model: "gpt-3.5-turbo",
-        messages: messages,
+        messages: newMessages,
       });
 
       if (response.choices && response.choices.length > 0) {
         const systemMessage = response.choices[0].message.content;
+
+        // Update previous conversation
         setPreviousConversation(
           `${previousConversation} User: ${userMessage} Assistant: ${systemMessage} `
         );
@@ -72,7 +88,6 @@ const Chat = () => {
           ...previousMessages,
           { text: systemMessage, user: { _id: 2 } },
         ]);
-        console.log("Updated Messages:", messages);
       } else {
         throw new Error(
           `Failed to get a successful response from OpenAI's chat API. Status: ${response.status}`
@@ -118,7 +133,6 @@ const Chat = () => {
                 </div>
               ) : (
                 <div key={index} className={`chat-messages chat-othersMessage`}>
-                  {/* <img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png" alt="other user profile" /> */}
                   <p>{message.text}</p>
                 </div>
               )
