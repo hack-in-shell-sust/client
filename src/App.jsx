@@ -53,8 +53,6 @@ const App = () => {
           </Routes>
         </UserProvider>
       </BrowserRouter>
-      s
-
     </>
   )
 }
