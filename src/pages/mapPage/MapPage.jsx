@@ -6,7 +6,7 @@ import './MapPage.css'
 import NavigationBar from '../landingPage/navbar/NavigationBar';
 
 
-const MapsComponent = () => {
+const MapPage = ({markers}) => {
   const mapContainerRef = useRef(null);
   const mapboxAccessToken = import.meta.env.VITE_MAPBOX_TOKEN;
 
@@ -21,9 +21,20 @@ const MapsComponent = () => {
     });
 
     // Add a marker as an example
-    const marker = new mapboxgl.Marker({ color: 'red' })
-      .setLngLat([90.37921708900197, 23.948376516259003])
-      .addTo(map);
+    // const marker = new mapboxgl.Marker({ color: 'red' })
+    //   .setLngLat([90.37921708900197, 23.948376516259003])
+    //   .addTo(map);
+    
+    markers.forEach(marker => {
+        new mapboxgl.Marker().setLngLat([marker.longitude, marker.latitude])
+        .setPopup(
+            new mapboxgl.Popup().setText(marker.doctorName)
+        )
+        .addTo(map);
+      });
+  
+      // Cleanup
+      return () => map.remove();
   }, []);
 
   return (
@@ -37,4 +48,4 @@ const MapsComponent = () => {
   )
 };
 
-export default MapsComponent;
+export default MapPage;

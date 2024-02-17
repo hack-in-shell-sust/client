@@ -109,7 +109,7 @@ const NavigationBar = () => {
                   ) : (
                     <>
                       <div className="my-auto navSubMenu">
-                        <Link to="/home" className='navMenuPageLinks'>Home</Link>
+                        <Link to="/" className='navMenuPageLinks'>Home</Link>
                         <Link to="/chat" className='navMenuPageLinks'>Chat</Link>
                         <Link to="/map" className='navMenuPageLinks'>Map</Link>
                         <Link to="/doctors" className='navMenuPageLinks'>Doctor</Link>

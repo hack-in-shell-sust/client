@@ -27,8 +27,12 @@ const Work = () => {
   return (
     <div className="work-section-wrapper">
       <div className="work-section-top" >
-        <h1 className="primary-heading">Features</h1>
-        <p className="primary-text">
+        <h1 className="primary-heading"
+            data-aos="fade-up" data-aos-delay="200" data-aos-anchor-placement="center-bottom"
+        >Features</h1>
+        <p className="primary-text"
+            data-aos="fade-up" data-aos-delay="200" data-aos-anchor-placement="center-bottom"
+        >
           Here is the features pf MedAid. Register for trying out the system
         </p>
       </div>

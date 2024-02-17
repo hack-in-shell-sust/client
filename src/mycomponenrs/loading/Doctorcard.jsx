@@ -1,35 +1,36 @@
-import React from 'react';
-import { Button } from "@/components/ui/button"
+import React, { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Button } from "@/components/ui/button"; // Assuming this is the correct import path
 
+const DoctorCard = ({ name, contact, description, isOnlineBookable, rating, longitude, latitude, clinic }) => {
+  const navigate = useNavigate();
 
+  const goToMap = (docLongitude, docLatitude, doctorName) => {
+    const queryParams = new URLSearchParams({
+      longitude: docLongitude,
+      latitude: docLatitude,
+      doctorName: doctorName
+    });
 
-const DoctorCard = ({ name, specialty ,imageUrl , booked }) => {
+    navigate(`/mapdoctor?${queryParams}`);
+  };
+
   return (
-    <>
-    <div className="max-w-md rounded shadow-lg text-center p-6 w-[30%]">
+    <div className="max-w-md rounded text-center p-6 w-[30%] doctorCard">
       <div className='flex gap-4'>
-      <div className="w-1/2 h-36">
-        <img  className="w-full h-full " src='/public/doctors/image.jpeg' alt={'your image'} />
-        {/* <img className="w-full h-full object-cover" src={imageUrl} alt={name} /> */}
-      </div>
-      <div className="w-1/2">
-        <h3 className="text-lg text-gray-900 font-semibold">{name}</h3>
-        <p className="text-gray-600 text-sm">{specialty}</p>
-      </div>
-      </div>
-      <div className="flex mt-4 gap-2 justify-evenly"> 
-        {/* <button className="bg-blue-500 hover:bg-blue-700 text-sm text-white font-bold py-2 px-4 rounded">
-          Book Appointment
-        </button> */}
-        { booked ? 
-        <Button className='hover:bg-blue-700'>Book Appointment</Button>
-        : <Button className='hover:bg-blue-700'>No free slot </Button>
-        }
-        
-        <Button className='hover:bg-blue-700'>Find on map</Button>
+        <div className="w-[8vw] h-[11vw]">
+          <img className="w-full h-[8.5vw]" src='/doctors/image.jpeg' alt={'your image'} />
+          <Button className='hover:bg-blue-700 w-[100%] h-2.5vw]' onClick={() => goToMap(90.37921708900197, 23.948376516259003, "tafsir")}>Find on map</Button>
         </div>
+        <div className="doctorcard_textBox">
+          <h3 className="text-lg text-white font-semibold">{name}</h3>
+          <p className="text-sm">Speciality: {description}</p>
+          <p className="text-sm">Clinic: {clinic}</p>
+          <p className="text-sm">Rating: {rating}</p>
+          <p className="text-sm">Phone no: {contact}</p>
+        </div>
+      </div>
     </div>
-  </>
   );
 };
 

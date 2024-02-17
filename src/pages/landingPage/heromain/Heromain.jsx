@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 
 import './Heromain.css';
 import { Check, ChevronsUpDown } from "lucide-react"
@@ -17,31 +17,11 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
+import axios from 'axios';
 
-const frameworks = [
-    {
-      value: "next.js",
-      label: "Next.js",
-    },
-    {
-      value: "sveltekit",
-      label: "SvelteKit",
-    },
-    {
-      value: "nuxt.js",
-      label: "Nuxt.js",
-    },
-    {
-      value: "remix",
-      label: "Remix",
-    },
-    {
-      value: "astro",
-      label: "Astro",
-    },
-  ]
 
 const Heromain = () => {
+    //search text
     const [searchText, setSearchText] = useState('');
     const [searchFilter, setSearchFilter] = useState('Medicine');
     const handleSearchFilterChange = (e) => {
@@ -51,20 +31,74 @@ const Heromain = () => {
     const [open, setOpen] = React.useState(false)
     const [value, setValue] = React.useState("")
 
+
+    //get list of doctor and medicine
+    const [allDoctor, setAllDoctor] = useState('');
+    const [allMedicine, setAllMedicine] = useState('');
+    
+    const getDoctors = async () => { 
+        const apipath = 'http://192.168.238.113:8085/api/doctor/list'
+        try{
+            const response = await axios.get(apipath); 
+            console.log(response.data);
+            const formattedData = response.data.map(doctor => ({
+                value: doctor.name,
+                label: doctor.name,
+                id: doctor.id
+            }));
+            setAllDoctor(formattedData);
+        } catch (error) {
+            console.error("Error getting doctors:", error);
+            if (error.response) {
+              console.error("Response data:", error.response.data);
+            }
+        }    
+    }
+
+    const getMedicine = async () => { 
+        const apipath = 'http://192.168.238.113:8085/api/doctor/list'
+        try{
+            const response = await axios.get(apipath); 
+            console.log(response.data);
+            const formattedData = response.data.map(doctor => ({
+                value: doctor.name,
+                label: doctor.name,
+                id: doctor.id
+            }));
+            setAllMedicine(formattedData);
+        } catch (error) {
+            console.error("Error getting doctors:", error);
+            if (error.response) {
+              console.error("Response data:", error.response.data);
+            }
+        }    
+    }
+
+    useEffect(() => {
+        if(searchFilter == 'Doctor')getDoctors();
+        // else if(searchFilter == 'Medicine')getMedicine();
+    }, [searchFilter]);
+
   return (
     <div className='heromain_background'>
         <div className='heromain'>
             <div className='heromain_mainBox'>
-                <div className='heromain_textBox'>
+                <div className='heromain_textBox'
+                    data-aos="fade-left" data-aos-delay="200" data-aos-anchor-placement="center-bottom"
+                >
                     <h1>Search your symptoms</h1>
                     <h2>Choose your nearest specialist</h2>
                 </div>
-                <div className='heromain_imageBox'>
+                <div className='heromain_imageBox'
+                    data-aos="fade-right" data-aos-delay="200" data-aos-anchor-placement="center-bottom"
+                >
                     <img src="/heromain/people_search.png"/>
                 </div>
             </div>
         </div>
-        <div className='heromain_inputBox'>
+        <div className='heromain_inputBox'
+            data-aos="fade-up" data-aos-delay="200" data-aos-anchor-placement="center-bottom"
+        >
             {(searchFilter === 'Medicine' || searchFilter === 'Doctor')?
                 <div className='heromain_inputBoxSeachText'>
                 <Popover open={open} onOpenChange={setOpen} className="w-full h-full">
@@ -76,7 +110,7 @@ const Heromain = () => {
                         className="w-[100%] h-[100%] justify-between"
                         >
                         {value
-                            ? frameworks.find((framework) => framework.value === value)?.label
+                            ? allDoctor.find((framework) => framework.value === value)?.label
                             : `Select a ${searchFilter}`}
                         <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                         </Button>
@@ -86,7 +120,7 @@ const Heromain = () => {
                         <CommandInput placeholder={`Select a ${searchFilter}`} />
                         <CommandEmpty>No framework found.</CommandEmpty>
                         <CommandGroup>
-                            {frameworks.map((framework) => (
+                            {allDoctor && allDoctor.map((framework) => (
                             <CommandItem
                                 key={framework.value}
                                 value={framework.value}

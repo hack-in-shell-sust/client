@@ -1,0 +1,27 @@
+.doctorCard{
+    background-color: rgb(47,119,111,0.8);
+    margin-bottom: 3vw;
+}
+.doctorCard Button{
+    background-color: white;
+    color: black;
+    margin-top: 0.5vw;
+    font-size: 1vw;
+    height: 3vw;
+}
+.doctorCard Button:hover{
+    color: white;
+}
+.doctorcard_textBox{
+    text-align: left;
+    color: white;   
+}
+.doctorcard_textBox h3{
+    font-size: 1.3vw;
+    margin-bottom: 0.5vw;
+}
+.doctorcard_textBox p{
+    font-size: 1vw;
+    margin-bottom: 0.3vw;
+    
+}

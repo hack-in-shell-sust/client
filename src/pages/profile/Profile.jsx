@@ -28,7 +28,7 @@ const Profile = () => {
         console.log(userInfo);
         if (Object.keys(userInfo).length == 0 && localStorage.getItem('hackInShellAccessToken') == '') {
             //navigate('/', { replace: true });
-            //window.open("/", "_top");
+            window.open("/", "_top");
         }
     }, [userInfo]);
 

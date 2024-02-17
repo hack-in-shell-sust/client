@@ -1,16 +1,19 @@
 import React, { useState, useEffect } from 'react'
 import {Routes, Route, BrowserRouter, Navigate} from "react-router-dom";
 import './App.css'
+import AOS from 'aos';
+import 'aos/dist/aos.css';
 
 import Login from './pages/login/Login';
 import Signup from './pages/signup/Signup';
 import LandingPage from './pages/landingPage/LandingPage';
-
 import Chat from './pages/chat/Chat';
 import Profile from './pages/profile/Profile';
 import Doctors from './pages/doctors/Doctors';
 import {UserProvider} from './context/UserContext';
 import MapPage from './pages/mapPage/MapPage';
+import GazeRecorder from './pages/gaze/GazeRecorder';
+import MapDoctor from './pages/mapPage/MapDoctor';
 
 
 const App = () => {
@@ -30,6 +33,11 @@ const App = () => {
   //     setLoggedIn(true);
   //   }
   // }, [token]);
+  useEffect(() => {
+      AOS.init({
+          once: true, // Set this to true if you want animations to occur only once
+      });
+}, []);
 
   return (
     <>
@@ -46,8 +54,9 @@ const App = () => {
             <Route path="/profile" element={ <Profile/>} />
             {/* <Route path="/map" element={checkToken() ? <Navigate to="/login" /> : <MapPage/>} /> */}
             <Route path="/map" element={<MapPage/>} />
-
+            <Route path="/mapdoctor" element={ <MapDoctor/>} />
             <Route path="/doctors" element={ <Doctors/>} />
+            <Route path="/gazerecorder" element={ <GazeRecorder/>} />
             
 
           </Routes>
