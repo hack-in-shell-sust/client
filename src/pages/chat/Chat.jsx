@@ -30,7 +30,7 @@ const Chat = () => {
         messages: [
           {
             role: "system",
-            content: `Please summarize the following text and be careful about keeping medically relevant information and summarize it so it can be fed to another model as the past conversation: ${text}`,
+            content: `Please summarize the following text and be careful about keeping medically relevant information and summarize it so it can be fed to another model as the past conversation. Information such is someone having pain or nausea and particulars like that is very important: ${text}`,
           },
         ],
       });
