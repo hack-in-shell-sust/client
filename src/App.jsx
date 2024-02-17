@@ -47,13 +47,12 @@ const App = () => {
             {/* <Route path="/map" element={checkToken() ? <Navigate to="/login" /> : <MapPage/>} /> */}
             <Route path="/map" element={<MapPage/>} />
 
-            {/*<Route path="/doctors" element={ <Doctors/>} />*/}
+            <Route path="/doctors" element={ <Doctors/>} />
             
 
           </Routes>
         </UserProvider>
       </BrowserRouter>
-      s
 
     </>
   )

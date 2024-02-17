@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button"
 const DoctorCard = ({ name, specialty ,imageUrl , booked }) => {
   return (
     <>
-    <div className="max-w-md rounded shadow-lg text-center p-6">
+    <div className="max-w-md rounded shadow-lg text-center p-6 w-[30%]">
       <div className='flex gap-4'>
       <div className="w-1/2 h-36">
         <img  className="w-full h-full " src='/public/doctors/image.jpeg' alt={'your image'} />

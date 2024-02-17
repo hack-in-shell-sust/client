@@ -28,33 +28,53 @@ const Chat = () =>{
     const msg = inputValue;
     setInputValue('');
   
+    // const requestBody = {
+    //   messages: [{ role: 'user', content: msg }],
+    // };
+    const prompt = inputValue;
+    const temperature = 0.7; // Adjust for desired creativity/accuracy
+    const max_tokens = 100; // Number of words to generate
+
     const requestBody = {
-      messages: [{ role: 'user', content: msg }],
+      model: 'text-davinci-003',
+      prompt,
+      temperature,
+      max_tokens,
     };
   
     try {
-      const response = await axios.post(
-        'https://api.openai.com/v1/chat/completions',
-        requestBody,
+      const response = await fetch(
+        "https://api.openai.com/v1/chat/completions",
         {
+          method: "POST",
           headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${VITE_OPEN_API_KEY}`,
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${VITE_OPEN_API_KEY}`,
           },
-          timeout: 10000,
+          body: JSON.stringify({
+            model: "gpt-3.5-turbo",
+            // We'll later replace the content with user input
+            messages: [...messages, { "role": "user", "content": "hi" }],
+            temperature: 0.7,
+          }),
         }
       );
+      console.log(response.data);
   
-      if (response.data && response.data.choices && response.data.choices.length > 0) {
-        const receivedMessage = response.data.choices[0].message.content;
-        setMessages(previousMessages => [...previousMessages, { text: receivedMessage }]);
-      } else {
-        throw new Error("Failed to get response from OpenAI's chat API");
-      }
+      // if (response.status === 200) {
+      //   const receivedMessage = response.data.choices[0].message.content;
+      //   setMessages(previousMessages => [...previousMessages, { text: receivedMessage }]);
+      // } else {
+      //   throw new Error(`Failed to get successful response from OpenAI's chat API. Status: ${response.status}`);
+      // }
     } catch (error) {
       console.error("Error sending message:", error);
+      if (error.response) {
+        console.error("Response data:", error.response.data);
+      }
     }
   };
+  
   
   
 

@@ -8,6 +8,12 @@ import {useUserContext} from '../../../context/UserContext';
 
 const NavigationBar = () => {
   const {userInfo, setUserInfo} = useUserContext();
+  
+  const checkToken = () => {
+    const token = localStorage.getItem('hackInShellAccessToken');
+    return (token == null || token == undefined || token == "");
+  }
+  
   var count=0;
   
   const respNav = () => {   
@@ -91,28 +97,28 @@ const NavigationBar = () => {
                 <div className='navMenu'>
                   
                 {
-                  userInfo == null || Object.keys(userInfo).length == 0 ? (
-                    <React.Fragment>
+                  checkToken() ? 
+                  (
+                    <>
+                    
                       <div className="my-auto navSubMenu">
-                        <a href="/home" className='navMenuPageLinks'>Home</a>
-                        <a href="/chat" className='navMenuPageLinks'>Chat</a>
-                        <a href="/map" className='navMenuPageLinks'>Map</a>
-                        <a href="/profile" className='navMenuPageLinks'>Profile</a>
+
                       </div>
                       <Link to='/Login' className='my-auto tryLink '>Login</Link>
-                    </React.Fragment>
+                    </>
                   ) : (
-                    <React.Fragment>
+                    <>
                       <div className="my-auto navSubMenu">
-                        <a href="#features" className='navMenuPageLinks'>Feature</a>
-                        <a href="#pricing" className='navMenuPageLinks'>Pricing</a>
-                        <a href="#faq" className='navMenuPageLinks'>FAQ</a>
-                        <a href="/profile" className='navMenuPageLinks'>Profile</a>
+                        <Link to="/home" className='navMenuPageLinks'>Home</Link>
+                        <Link to="/chat" className='navMenuPageLinks'>Chat</Link>
+                        <Link to="/map" className='navMenuPageLinks'>Map</Link>
+                        <Link to="/doctors" className='navMenuPageLinks'>Doctor</Link>
+                        <Link to="/profile" className='navMenuPageLinks'>Profile</Link>
                       </div>
-                      <p>{userInfo}</p>
-                    </React.Fragment>
+                      <p className='my-auto tryLink'>{(JSON.parse(localStorage.getItem('hackInShellUser')).email)}</p>
+                      </>
                   )
-                }
+                  }
                 </div> 
                 <div className='navExtra' onClick={()=> respNav()}></div>
             </div>

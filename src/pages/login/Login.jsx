@@ -78,24 +78,12 @@ const Login = () => {
         setPassword('');
     };
 
-    const decodeJwtToken = async (jwtToken) => {
-        //setLoading(true);
-        try {
-          const response = await axios.post('https://jwt.io/api/debugger', { token: jwtToken });
-          //setDecodedToken(response.data);
-          return response.data;
-        } catch (error) {
-          console.error('Error decoding token:', error.message);
-        } finally {
-          //setLoading(false);
-        }
-    }
 
     useEffect(() => {
         //console.log(userInfo);
         if (userInfo && Object.keys(userInfo).length > 0 && localStorage.getItem('hackInShellAccessToken')) {
             //navigate('/chatlist', { replace: true });
-            //window.open("/chatlist", "_top");
+            window.open("/", "_top");
         }
     }, [userInfo]);
 

@@ -29,7 +29,7 @@ const Work = () => {
       <div className="work-section-top" >
         <h1 className="primary-heading">Features</h1>
         <p className="primary-text">
-          Here is the upcoming exciting events of IUTCS. Register for the competitons and win exciting prizes
+          Here is the features pf MedAid. Register for trying out the system
         </p>
       </div>
       <div className="work-section-bottom">

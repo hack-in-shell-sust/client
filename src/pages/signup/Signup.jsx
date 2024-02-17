@@ -3,6 +3,7 @@ import Axios from 'axios';
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Link, useNavigate } from 'react-router-dom';
+import { jwtDecode } from "jwt-decode";
 
 import './Signup.css'
 import {useUserContext} from '../../context/UserContext';
@@ -49,7 +50,7 @@ const Signup = () => {
         // }
         else{
             // const apipath = `${process.env.REACT_APP_API_URI}/user/login`;
-            const apipath = 'http://192.168.238.113:8085/api/auth/signup/user'
+            const apipath = 'http://192.168.238.113:8085/api/auth/register/user'
             Axios.post(apipath, 
             {
                 firstName:userName,
@@ -60,16 +61,17 @@ const Signup = () => {
             ).then((response) =>{
                 //alert(JSON.stringify(response.data));
                 // console.log(response);
-                // console.log(response.data);
+                console.log(response.data);
                 setSignupStatus("please wait");
-                if(response.data){
-                    const userObj=jwtDecode(response.data.data.token);
-                    setUserInfo(userObj);
-                    localStorage.setItem('hackInShellUser', JSON.stringify(userObj));
-                    localStorage.setItem('hackInShellAccessToken', response.data.data.token);
+                if(response.data.firstName){
+                    navigate('/login', { replace: true });
+                    //const userObj=jwtDecode(response.data.data.token);
+                    // setUserInfo(userObj);
+                    // localStorage.setItem('hackInShellUser', JSON.stringify(userObj));
+                    // localStorage.setItem('hackInShellAccessToken', response.data.data.token);
                 }
                 else{
-                    setSignupStatus("Name already taken");
+                    setSignupStatus("Email already taken");
                 }
             })
             .catch(error => {
@@ -85,8 +87,8 @@ const Signup = () => {
             });
         };
 
-        setUsername('');
-        setLastname('');
+        setUserName('');
+        setLastName('');
         setUserEmail('');
         setPassword('');
         setConfirmPassword('')
@@ -95,7 +97,7 @@ const Signup = () => {
     useEffect(() => {
         //console.log(userInfo);
         if (userInfo && Object.keys(userInfo).length > 0) {
-            navigate('/chatlist', { replace: true });
+            //window.open("/chatlist", "_top");
         }
     }, [userInfo]);
 
