@@ -9,6 +9,7 @@ import LandingPage from './pages/landingPage/LandingPage';
 import Chat from './pages/chat/Chat';
 import Profile from './pages/profile/Profile';
 import Doctors from './pages/doctors/Doctors';
+import Fakeprofile from './pages/fakeprofile/Fakeprofile';
 import {UserProvider} from './context/UserContext';
 
 const App = () => {
@@ -41,7 +42,7 @@ const App = () => {
             <Route path='/chat' element={checkToken() ? <Navigate to="/login" />  : <Chat/>} />
             <Route path="/profile" element={ <Profile/>} />
             <Route path="/doctors" element={ <Doctors/>} />
-            <Route path='/fakeprofile' element={} />
+            <Route path='/fakeprofile' element={<Fakeprofile/>} />
           </Routes>
         </UserProvider>
       </BrowserRouter>
