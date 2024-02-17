@@ -26,10 +26,10 @@
   .work-section-top h1 {
     max-width: 700px !important;
     position: relative;
-    padding-bottom: 1vh;
+    padding-bottom: 0.5vw;
+    margin-bottom:1vw ;
     font-size: 3vw;
-    margin-bottom: 1vw;
-
+    
   }
   .work-section-top h1::after{
     content: "";

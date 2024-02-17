@@ -8,9 +8,9 @@ import LandingPage from './pages/landingPage/LandingPage';
 
 import Chat from './pages/chat/Chat';
 import Profile from './pages/profile/Profile';
+import Doctors from './pages/doctors/Doctors';
 import {UserProvider} from './context/UserContext';
 import MapPage from './pages/mapPage/MapPage';
-
 
 
 const App = () => {
@@ -40,14 +40,20 @@ const App = () => {
             <Route path="/" element={ <LandingPage />} />
             <Route path="/login" element={checkToken() ? <Login /> : <Navigate to="/chatlist" />} />
             <Route path="/signup" element={checkToken() ? <Signup /> : <Navigate to="/chatlist" />} />
-            <Route path='/chat' element={checkToken() ? <Navigate to="/login" />  : <Chat/>} />
-            <Route path="/profile" element={checkToken() ? <Navigate to="/login" /> : <Profile/>} />
+            {/* <Route path='/chat' element={checkToken() ? <Navigate to="/login" />  : <Chat/>} /> */}
+            <Route path="/chat" element={<Chat/>} />
+            {/* <Route path="/profile" element={checkToken() ? <Navigate to="/login" /> : <Profile/>} /> */}
+            <Route path="/profile" element={ <Profile/>} />
             {/* <Route path="/map" element={checkToken() ? <Navigate to="/login" /> : <MapPage/>} /> */}
             <Route path="/map" element={<MapPage/>} />
+
+            {/*<Route path="/doctors" element={ <Doctors/>} />*/}
+            
+
           </Routes>
         </UserProvider>
       </BrowserRouter>
-      
+      s
 
     </>
   )

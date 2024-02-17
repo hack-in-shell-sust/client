@@ -94,8 +94,8 @@ const NavigationBar = () => {
                   userInfo == null || Object.keys(userInfo).length == 0 ? (
                     <React.Fragment>
                       <div className="my-auto navSubMenu">
-                        <a href="#features" className='navMenuPageLinks'>Feature</a>
-                        <a href="#pricing" className='navMenuPageLinks'>Pricing</a>
+                        <a href="/home" className='navMenuPageLinks'>Home</a>
+                        <a href="/chat" className='navMenuPageLinks'>Chat</a>
                         <a href="/map" className='navMenuPageLinks'>Map</a>
                         <a href="/profile" className='navMenuPageLinks'>Profile</a>
                       </div>
