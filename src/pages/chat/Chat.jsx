@@ -23,6 +23,8 @@ const Chat = () => {
 
   const VITE_OPEN_API_KEY = import.meta.env.VITE_OPEN_API_KEY;
 
+  const [previousConversation, setPreviousConversation] = useState("");
+
   const handleMessageSubmit = (e) => {
     e.preventDefault();
     if (inputValue.trim() !== "") {
@@ -32,32 +34,48 @@ const Chat = () => {
   };
 
   const sendMessage = async () => {
-    const msg = inputValue;
+    const userMessage = inputValue;
     setInputValue("");
+
+    const messages = [
+      {
+        role: "system",
+        content: `You are a medical assistant. Your job is patient history taking. You are going to ask the patient about their symptoms and medical condition. Previous conversations: ${previousConversation}`,
+      },
+      { role: "user", content: userMessage },
+    ];
+
+    // Log the messages before making the API call
+    console.log("Messages being sent to GPT-3 API:", messages);
+    console.log("Previous conversation:", previousConversation);
 
     try {
       const response = await openai.chat.completions.create({
         model: "gpt-3.5-turbo",
-        messages: [
-          { role: "system", content: "You are a helpful assistant." },
-          { role: "user", content: msg },
-        ],
+        messages: messages,
       });
-      console.log(response);
 
       if (response.choices && response.choices.length > 0) {
-        setMessages(previousMessages => [
-          ...previousMessages, 
-          {text:msg , user: { _id: 1 }}
-        ]);
-        const receivedMessage = response.choices[0].message.content;
+        const systemMessage = response.choices[0].message.content;
+        setPreviousConversation(
+          `${previousConversation} User: ${userMessage} Assistant: ${systemMessage} `
+        );
+
+        // Add user message to the state
         setMessages((previousMessages) => [
           ...previousMessages,
-          { text: receivedMessage, user: { _id: 2 } },
+          { text: userMessage, user: { _id: 1 } },
         ]);
+
+        // Add system message to the state
+        setMessages((previousMessages) => [
+          ...previousMessages,
+          { text: systemMessage, user: { _id: 2 } },
+        ]);
+        console.log("Updated Messages:", messages);
       } else {
         throw new Error(
-          `Failed to get successful response from OpenAI's chat API. Status: ${response.status}`
+          `Failed to get a successful response from OpenAI's chat API. Status: ${response.status}`
         );
       }
     } catch (error) {
@@ -65,6 +83,13 @@ const Chat = () => {
       if (error.response) {
         console.error("Response data:", error.response.data);
       }
+    }
+  };
+
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      sendMessage();
     }
   };
 
@@ -105,6 +130,7 @@ const Chat = () => {
               type="text"
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
+              onKeyDown={handleKeyPress}
               placeholder="Type a message..."
               className="chat-inputField"
             />
