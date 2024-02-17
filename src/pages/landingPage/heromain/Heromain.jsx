@@ -70,7 +70,7 @@ const Heromain = () => {
                 <Popover open={open} onOpenChange={setOpen} className="w-full h-full">
                     <PopoverTrigger asChild >
                         <Button
-                        variant="outline"
+                        variant="ghost"
                         role="combobox"
                         aria-expanded={open}
                         className="w-[100%] h-[100%] justify-between"

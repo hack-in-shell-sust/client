@@ -2,16 +2,31 @@
   width: 100%;
   background: linear-gradient(to bottom left, rgb(218,240,235), rgb(255,255,255));
 }
-.chat_mainBox{
-  /* height: 47vw; */
-  width: 30vw;
-  background-color: pink;
-  background-color: rgb(9,111,88,0.4);
-  min-height: 89vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  margin: auto;
+@media screen and (min-width: 992px) {
+  .chat_mainBox{
+    /* height: 47vw; */
+    width: 30vw;
+    background-color: pink;
+    background-color: rgb(9,111,88,0.4);
+    min-height: 89vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    margin: auto;
+  }
+}
+@media screen and (max-width: 991px) {
+  .chat_mainBox{
+    /* height: 47vw; */
+    width: 90vw;
+    background-color: pink;
+    background-color: rgb(9,111,88,0.4);
+    min-height: 89vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    margin: auto;
+  }
 }
 .chat-header{
   height: 4vw;
@@ -41,6 +56,7 @@
   padding: 8px 12px;
   border-radius: 15px;
   max-width: 70%;
+  background-color: pink;
 }
 .chat-myMessage {
   background-color: #DCF8C6;
