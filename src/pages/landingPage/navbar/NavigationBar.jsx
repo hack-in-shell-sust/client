@@ -1,23 +1,35 @@
 import React, {useState, useEffect} from 'react'
-import './NavigationBar.css';
+import './NavigationBar.css'
+import { Link } from 'react-router-dom'
 import {BsFillPlayCircleFill} from 'react-icons/bs';
 import {ImCross} from 'react-icons/im';
 import {GiHamburgerMenu} from 'react-icons/gi';
-import { Link } from 'react-router-dom';
+import {useUserContext} from '../../../context/UserContext';
+
 const NavigationBar = () => {
-  const [isSubMenuOpen, setIsSubMenuOpen] = useState(false);
-  const subMenuToggle = (isOpen) => {
-    //alert(isOpen)
-    setIsSubMenuOpen(isOpen);
-  };
-  // const subMenuToggle = () => {
-  //   document.querySelector('.homepage_navigation_submenu').classList.add('homepage_navigation_submenuToggle');
-  // }
-  const loginToggle = () => {
-    const token = localStorage.getItem('hackInShellAccessToken');
-    return (token == null || token == undefined || token == "");
+  const {userInfo, setUserInfo} = useUserContext();
+  var count=0;
+  
+  const respNav = () => {   
+    count=(count+1)%2;
+    var navMenu=document.querySelector(`.navMain`);
+    if(count == 1){
+      navMenu.style.transform = 'translateY(0)';
+      navMenu.style.visibility ="visible";
+      
+      document.querySelector('.navBarIconBurger').style.visibility='hidden';
+      document.querySelector('.navBarIconCross').style.visibility='visible';
+    }
+    else{
+      navMenu.style.transform = 'translateY(-50vh)';
+      navMenu.style.visibility ="hidden";
+
+      document.querySelector('.navBarIconBurger').style.visibility='visible';
+      document.querySelector('.navBarIconCross').style.visibility='hidden';
+    }
   }
 
+  
   useEffect(() => {
     const componentSlide = () => {
       var sectionId = window.location.hash.substring(1);
@@ -40,89 +52,72 @@ const NavigationBar = () => {
       componentSlide();
     }, 150);
   }, []);
-  
+
+
+  //screen size responsive
+  const [windowSize, setWindowSize] = useState({
+    width: window.innerWidth,
+    height: window.innerHeight
+  });
+
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowSize({
+        width: window.innerWidth,
+        height: window.innerHeight
+      });
+    };
+
+    window.addEventListener('resize', handleResize);
+
+    // Cleanup
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
+
   return (
-    <div className="homepage_navigation">
-      <div className="navigation">
-        <div className="logoBar">
-          <a href="/" className='my-auto'>
-            <img src="/navbar/logo.png" alt="navlogo"/>
-          </a>
-          <div className='my-auto navBarIconBar'>
-            <GiHamburgerMenu className='my-auto navBurgerIcon navBarIconBurger' onClick={()=> respNav()}/>
-            <ImCross className='my-auto navBurgerIcon navBarIconCross' onClick={()=> respNav()}/>
-          </div>
-        </div>
-
-        <div className='navMain'>
-          <div className='navMenu'>
-            <div className="my-auto navSubMenu">
-              <Link to="/" className='navMenuPageLinks'>Home</Link> 
-              <Link to="/chatlist" className='navMenuPageLinks'>Chat</Link> 
-              <Link to="/projects" className='navMenuPageLinks'>Projects</Link> 
-              <a href="#pricing" className='navMenuPageLinks'>Pricing</a>
-              <a href="#guides" className='navMenuPageLinks'>Guides</a> 
-              {
-                loginToggle() ? 
-                (
-                  <Link to="/login" className="my-auto navbar_login">
-                    <button className='mx-auto'>Log In</button>
-                  </Link>
-                )
-                :
-                (
-                  <Link to="/profile" className="my-auto navbar_login">
-                    <button className='mx-auto'>Profile</button>
-                  </Link>
-                )
-              }
+    <>
+        <div className="navigation">
+            <div className="logoBar">
+               <a href="/"><img src="/navbar/logo.png" alt="navlogo" className='my-auto'/></a>
+               <div className='my-auto navBarIconBar'>
+                  <GiHamburgerMenu className='my-auto navBurgerIcon navBarIconBurger' onClick={()=> respNav()}/>
+                  <ImCross className='my-auto navBurgerIcon navBarIconCross' onClick={()=> respNav()}/>
+               </div>
             </div>
-            {/* {
-              loginToggle() ? 
-              (
-                <Link to="/login" className="my-auto">
-                  <button className="navbar_login ">Log in</button>
-                </Link>
-              ):
-              (
-                <Link to="/profile" className="my-auto">
-                  <button className="navbar_login_profile ">Profile</button>
-                </Link>
-              )
-            } */}
-            
-
-            {/* <a href="https://app.replymind.com/" target="_blank" rel="noopener noreferrer" className="my-auto">
-              <button className="navbar_getLink mt-2 lg:mt-0">Get ReplyMind it's free!</button>
-            </a> */}
-          </div> 
-          <div className='navExtra' onClick={()=> respNav()}></div>
+            <div className='navMain'>
+                <div className='navMenu'>
+                  
+                {
+                  userInfo == null || Object.keys(userInfo).length == 0 ? (
+                    <React.Fragment>
+                      <div className="my-auto navSubMenu">
+                        <a href="/home" className='navMenuPageLinks'>Home</a>
+                        <a href="/chat" className='navMenuPageLinks'>Chat</a>
+                        <a href="/map" className='navMenuPageLinks'>Map</a>
+                        <a href="/profile" className='navMenuPageLinks'>Profile</a>
+                      </div>
+                      <Link to='/Login' className='my-auto tryLink '>Login</Link>
+                    </React.Fragment>
+                  ) : (
+                    <React.Fragment>
+                      <div className="my-auto navSubMenu">
+                        <a href="#features" className='navMenuPageLinks'>Feature</a>
+                        <a href="#pricing" className='navMenuPageLinks'>Pricing</a>
+                        <a href="#faq" className='navMenuPageLinks'>FAQ</a>
+                        <a href="/profile" className='navMenuPageLinks'>Profile</a>
+                      </div>
+                      <p>{userInfo}</p>
+                    </React.Fragment>
+                  )
+                }
+                </div> 
+                <div className='navExtra' onClick={()=> respNav()}></div>
+            </div>
         </div>
-      </div>
-      
-      {isSubMenuOpen && (
-      <div className='homepage_navigation_submenu'
-        onMouseEnter={() => subMenuToggle(true)}
-        onMouseLeave={() => subMenuToggle(false)}
-      >
-        <div className='homepage_navigation_submenuOverview'>
-          <h2>Overview</h2>
-          <a href="#">Human-like replies</a>
-          <a href="#">Multi Lingual Capabilities</a>
-          <a href="#">Keyboard Extension</a>
-          <a href="#">Browser Extension</a>
-          <a href="#">Supported Platforms</a>
-        </div>  
-        <div className='homepage_navigation_submenuOverview'>
-          <h2>Who we are</h2>
-          <Link to="/about">About us</Link>
-          <Link to="#">Our team</Link>
-          <a href="#">Career</a>
-          <a href="#">Value & mission</a>
-        </div>  
-      </div>
-      )}
-    </div>
+    </>
   )
 }
 

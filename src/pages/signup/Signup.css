@@ -11,7 +11,7 @@
 @media (min-width: 767px) {
     .signup_mainBox{
         width: 28vw;
-        height: 40vw;
+        height: 44vw;
         /* margin-top:5%; */
         background-color: rgba(0,0,0,0.3);
         padding: 4% 3%;
@@ -46,7 +46,8 @@
         margin-bottom: 1vw;
     }
     .signup_signToLog{
-        color: white;   
+        color: white;  
+        font-size: 1vw; 
     }
 }
 @media (max-width: 766px) {

@@ -13,19 +13,8 @@ const Chat = () =>{
   const [inputValue, setInputValue] = useState('');
 
   const {userInfo} = useUserContext();
-
-  const location = useLocation();
-  const { receiverUser } = location.state;
   
-  const VITE_PUBNUB_PUBLISH_KEY = import.meta.env.VITE_PUBNUB_PUBLISH_KEY;
-  const VITE_PUBNUB_SUBSCRIBE_KEY = import.meta.env.VITE_PUBNUB_SUBSCRIBE_KEY;
-  const VITE_PUBNUB_USER_ID = import.meta.env.VITE_PUBNUB_USER_ID;
-
-  const pubnub = new PubNub({
-    publishKey: VITE_PUBNUB_PUBLISH_KEY,
-    subscribeKey: VITE_PUBNUB_SUBSCRIBE_KEY,
-    userId: VITE_PUBNUB_USER_ID,
-  });
+  const VITE_OPEN_API_KEY = import.meta.env.VITE_OPEN_API_KEY;
 
   const handleMessageSubmit = (e) => {
     e.preventDefault();
@@ -36,119 +25,87 @@ const Chat = () =>{
   };
 
   const sendMessage = async () => {
-    //alert(inputValue);
     const msg = inputValue;
     setInputValue('');
   
-    const myMsg = {
-      sendBy: userInfo.id,
-      sendTo: receiverUser.id,
-      message: msg, // Change this line to assign msg to the 'text' property
-      createdAt: new Date(),
+    const requestBody = {
+      messages: [{ role: 'user', content: msg }],
     };
   
-    const apipath = `https://sharental-api.vercel.app/chats/send`;
-  
     try {
-      const response = await axios.post(apipath, {
-        sendBy: userInfo.id,
-        sendTo: receiverUser.id,
-        message: msg,
-        createdAt: new Date(),
-      }, {
-        timeout: 10000, // Timeout set to 10 seconds (10000 milliseconds)
-      });
-      console.log(response.data);
-      if (response.data.message === "message sent") {
-        setMessages(previousMessages => [...previousMessages, response.data.chat]);
+      const response = await axios.post(
+        'https://api.openai.com/v1/chat/completions',
+        requestBody,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${VITE_OPEN_API_KEY}`,
+          },
+          timeout: 10000,
+        }
+      );
+  
+      if (response.data && response.data.choices && response.data.choices.length > 0) {
+        const receivedMessage = response.data.choices[0].message.content;
+        setMessages(previousMessages => [...previousMessages, { text: receivedMessage }]);
       } else {
-        throw new Error("Failed to send message: " + response.data.message);
+        throw new Error("Failed to get response from OpenAI's chat API");
       }
     } catch (error) {
       console.error("Error sending message:", error);
     }
   };
   
+  
 
  
   //get all message post request
-  const getAllMessages =  async () =>{
-    const apipath = `https://sharental-api.vercel.app/chats/receive`;
-    //const apipath = 'http://192.168.1.8:3001/chats/receive';
-    console.log(userInfo.id + " " + receiverUser.id);
-    try {
-      const response= await axios.post(apipath,
-        {
-          sendBy: userInfo.id,
-          sendTo: receiverUser.id,
-        },
-        {
-          timeout: 10000, // Timeout set to 30 seconds (30000 milliseconds)
-        },
-      ) 
-      // setPageLoading(false);
-      //console.log(response.data);
-      const Chats=response.data.chats;
+  // const getAllMessages =  async () =>{
+  //   const apipath = `https://sharental-api.vercel.app/chats/receive`;
+  //   //const apipath = 'http://192.168.1.8:3001/chats/receive';
+  //   // console.log(userInfo.id + " " + receiverUser.id);
+  //   try {
+  //     const response= await axios.post(apipath,
+  //       {
+  //         sendBy: userInfo.id,
+  //         sendTo: receiverUser.id,
+  //       },
+  //       {
+  //         timeout: 10000, // Timeout set to 30 seconds (30000 milliseconds)
+  //       },
+  //     ) 
+  //     // setPageLoading(false);
+  //     //console.log(response.data);
+  //     const Chats=response.data.chats;
 
-      const formattedMessages = Chats.map(chat => {
-      return {
-        _id: chat._id,
-        text: chat.message,
-        createdAt: new Date(chat.createdAt),
-        user: {
-          _id: chat.sendBy,
-          name: (chat.sendBy === 1) ? 'Tafsir' : 'Other User',
-        },
-      };
-    });
+  //     const formattedMessages = Chats.map(chat => {
+  //     return {
+  //       _id: chat._id,
+  //       text: chat.message,
+  //       createdAt: new Date(chat.createdAt),
+  //       user: {
+  //         _id: chat.sendBy,
+  //         name: (chat.sendBy === 1) ? 'Tafsir' : 'Other User',
+  //       },
+  //     };
+  //   });
 
-    // Sort the messages based on createdAt
-    const sortedMessages = formattedMessages.sort((a, b) => a.createdAt - b.createdAt);
+  //   // Sort the messages based on createdAt
+  //   const sortedMessages = formattedMessages.sort((a, b) => a.createdAt - b.createdAt);
 
-    // Set the sorted messages in the state
-    setMessages(sortedMessages);
-    //console.log(sortedMessages);
+  //   // Set the sorted messages in the state
+  //   setMessages(sortedMessages);
+  //   //console.log(sortedMessages);
 
-    } catch (error) {
-      console.error(error.message);
-    };
-  }
+  //   } catch (error) {
+  //     console.error(error.message);
+  //   };
+  // }
 
   useEffect(() => {
-    console.log(userInfo);
-    getAllMessages();
+    //console.log(userInfo);
+    //getAllMessages();
   }, []);
-
-  useEffect(() => {
-    const channel = `chat_${receiverUser.id}_${userInfo.id}`; // Define channel name
-
-    // Subscribe to PubNub
-    pubnub.subscribe({
-      channels: [channel],
-    });
-
-    // Listen for incoming messages
-    pubnub.addListener({
-      message: (event) => {
-        const incomingMessage = event.message.text; // Access message text
-        //console.log(event.message);
-        setMessages((prevMessages) => GiftedChat.append(prevMessages, [incomingMessage]));
-      },
-      presence: (event) => {
-        // Handle presence events (optional)
-      },
-      status: (status) => {
-        // Handle PubNub status updates (optional)
-      },
-      error: (error) => {
-        // Handle PubNub errors
-        console.error('PubNub error:', error);
-      },
-    });
-
-    // Cleanup when unmounting
-    return () => pubnub.unsubscribeAll();
-  }, [receiverUser.id, userInfo.id]);
 
   return (
     <>
