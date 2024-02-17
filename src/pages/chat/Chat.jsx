@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import "./Chat.css";
-import axios from "axios";
 import { IoMdSend } from "react-icons/io";
 import NavigationBar from "../landingPage/navbar/NavigationBar";
 import OpenAI from "openai";
@@ -10,45 +9,83 @@ const openai = new OpenAI({
   dangerouslyAllowBrowser: true,
 });
 
+const MAX_QUESTION_COUNT = 10;
+
 const Chat = () => {
   const [messages, setMessages] = useState([]);
   const [inputValue, setInputValue] = useState("");
   const [previousConversation, setPreviousConversation] = useState("");
+  const [fineTuneResult, setFineTuneResult] = useState(null);
+  const [questionCount, setQuestionCount] = useState(0);
+
+  useEffect(() => {
+    // Function to perform asynchronous tasks
+    const initializeChat = async () => {
+      try {
+        // Perform fine-tuning and store the result in state
+        const result = await openai.fineTuning.jobs.create({
+          training_file: "../../../dataset/my_file.jsonl",
+          model: "gpt-3.5-turbo",
+        });
+
+        // Update state with fine-tune result
+        setFineTuneResult(result);
+        console.log("Fine-tuning job created:", result);
+      } catch (error) {
+        console.error("Error during initialization:", error);
+      }
+    };
+
+    // Call the asynchronous function
+    initializeChat();
+  }, []);
+
+  const incrementQuestionCount = () => {
+    setQuestionCount((prevCount) => prevCount + 1);
+  };
 
   const handleMessageSubmit = (e) => {
     e.preventDefault();
     if (inputValue.trim() !== "") {
       setMessages([...messages, { text: inputValue }]);
       setInputValue("");
+      incrementQuestionCount();
     }
   };
 
   const getSummary = async (text) => {
     try {
       const response = await openai.chat.completions.create({
-        model: "gpt-3.5-turbo", // or any suitable summarization model
+        model: "gpt-3.5-turbo",
         messages: [
           {
             role: "system",
-            content: `Please summarize the following text and be careful about keeping medically relevant information and summarize it so it can be fed to another model as the past conversation. Information such is someone having pain or nausea and particulars like that is very important: ${text}`,
+            content: `Please summarize the following text and be careful about keeping medically relevant information and summarize it so it can be fed to another model as the past conversation. Information such as someone having pain or nausea and particulars like that is very important: ${text}`,
           },
         ],
       });
+
       console.log("Summary Response from OpenAI:", response);
 
       if (response.choices && response.choices.length > 0) {
         return response.choices[0].message.content;
       } else {
         console.error("Failed to get summary from OpenAI's summarization API");
-        return ""; // Return an empty string if the summarization fails
+        return "";
       }
     } catch (error) {
       console.error("Error getting summary:", error);
-      return ""; // Return an empty string in case of an error
+      return "";
     }
   };
 
   const sendMessage = async () => {
+    if (questionCount >= MAX_QUESTION_COUNT) {
+      // Reached the maximum allowed questions, handle accordingly
+      console.log("Maximum question limit reached.");
+      return;
+    }
+
     const userMessage = inputValue;
     setInputValue("");
 
@@ -62,7 +99,9 @@ const Chat = () => {
       },
       { role: "user", content: userMessage },
     ];
+
     console.log("Message being sent to GPT:", newMessages);
+
     try {
       const response = await openai.chat.completions.create({
         model: "gpt-3.5-turbo",
@@ -72,22 +111,21 @@ const Chat = () => {
       if (response.choices && response.choices.length > 0) {
         const systemMessage = response.choices[0].message.content;
 
-        // Update previous conversation
         setPreviousConversation(
           `${previousConversation} User: ${userMessage} Assistant: ${systemMessage} `
         );
 
-        // Add user message to the state
         setMessages((previousMessages) => [
           ...previousMessages,
           { text: userMessage, user: { _id: 1 } },
         ]);
 
-        // Add system message to the state
         setMessages((previousMessages) => [
           ...previousMessages,
           { text: systemMessage, user: { _id: 2 } },
         ]);
+
+        incrementQuestionCount(); // Increment question count after successfully sending a message
       } else {
         throw new Error(
           `Failed to get a successful response from OpenAI's chat API. Status: ${response.status}`
@@ -109,8 +147,8 @@ const Chat = () => {
   };
 
   useEffect(() => {
-    //console.log(userInfo);
-    //getAllMessages();
+    // console.log(userInfo);
+    // getAllMessages();
   }, []);
 
   return (
@@ -159,6 +197,9 @@ const Chat = () => {
           </div>
         </div>
       </div>
+      {/* <div className="question-count">
+        <p>Number of Questions Asked: {questionCount}</p>
+      </div> */}
     </>
   );
 };
