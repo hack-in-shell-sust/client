@@ -4,7 +4,7 @@
 }
 @media screen and (min-width: 992px) {
   .chat_mainBox{
-    width: 40vw;
+    width: 50vw;
     background-color: pink;
     background-color: rgb(9,111,88,0.4);
     height: 88vh;
@@ -27,7 +27,7 @@
     flex-direction: column;
     overflow-y: auto;
     padding:  1vw;
-    background-color: red;
+    /* background-color: red; */
   }
 }
 @media screen and (max-width: 991px) {

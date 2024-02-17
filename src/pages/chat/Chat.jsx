@@ -1,13 +1,7 @@
 import React, { useState, useEffect } from "react";
-import "./Chat.css"; // Import your custom CSS file
-import axios from "axios";
+import "./Chat.css";
 import { IoMdSend } from "react-icons/io";
-import PubNub from "pubnub";
-import { useLocation } from "react-router-dom";
-
-import { useUserContext } from "../../context/UserContext";
 import NavigationBar from "../landingPage/navbar/NavigationBar";
-
 import OpenAI from "openai";
 
 const openai = new OpenAI({
@@ -15,49 +9,126 @@ const openai = new OpenAI({
   dangerouslyAllowBrowser: true,
 });
 
+const MAX_QUESTION_COUNT = 10;
+
 const Chat = () => {
   const [messages, setMessages] = useState([]);
   const [inputValue, setInputValue] = useState("");
+  const [previousConversation, setPreviousConversation] = useState("");
+  const [fineTuneResult, setFineTuneResult] = useState(null);
+  const [questionCount, setQuestionCount] = useState(0);
 
-  const { userInfo } = useUserContext();
+  useEffect(() => {
+    // Function to perform asynchronous tasks
+    const initializeChat = async () => {
+      try {
+        // Perform fine-tuning and store the result in state
+        const result = await openai.fineTuning.jobs.create({
+          training_file: "../../../dataset/my_file.jsonl",
+          model: "gpt-3.5-turbo",
+        });
 
-  const VITE_OPEN_API_KEY = import.meta.env.VITE_OPEN_API_KEY;
+        // Update state with fine-tune result
+        setFineTuneResult(result);
+        console.log("Fine-tuning job created:", result);
+      } catch (error) {
+        console.error("Error during initialization:", error);
+      }
+    };
+
+    // Call the asynchronous function
+    initializeChat();
+  }, []);
+
+  const incrementQuestionCount = () => {
+    setQuestionCount((prevCount) => prevCount + 1);
+  };
 
   const handleMessageSubmit = (e) => {
     e.preventDefault();
     if (inputValue.trim() !== "") {
       setMessages([...messages, { text: inputValue }]);
       setInputValue("");
+      incrementQuestionCount();
     }
   };
 
-  const sendMessage = async () => {
-    const msg = inputValue;
-    setInputValue("");
-
+  const getSummary = async (text) => {
     try {
       const response = await openai.chat.completions.create({
         model: "gpt-3.5-turbo",
         messages: [
-          { role: "system", content: "You are a helpful assistant." },
-          { role: "user", content: msg },
+          {
+            role: "system",
+            content: `Please summarize the following text and be careful about keeping medically relevant information and summarize it so it can be fed to another model as the past conversation. Information such as someone having pain or nausea and particulars like that is very important: ${text}`,
+          },
         ],
       });
-      console.log(response);
+
+      console.log("Summary Response from OpenAI:", response);
 
       if (response.choices && response.choices.length > 0) {
-        setMessages(previousMessages => [
-          ...previousMessages, 
-          {text:msg , user: { _id: 1 }}
-        ]);
-        const receivedMessage = response.choices[0].message.content;
+        return response.choices[0].message.content;
+      } else {
+        console.error("Failed to get summary from OpenAI's summarization API");
+        return "";
+      }
+    } catch (error) {
+      console.error("Error getting summary:", error);
+      return "";
+    }
+  };
+
+  const sendMessage = async () => {
+    if (questionCount >= MAX_QUESTION_COUNT) {
+      // Reached the maximum allowed questions, handle accordingly
+      console.log("Maximum question limit reached.");
+      return;
+    }
+
+    const userMessage = inputValue;
+    setInputValue("");
+
+    const summary = await getSummary(previousConversation);
+    console.log("Summary:", summary);
+
+    const newMessages = [
+      {
+        role: "system",
+        content: `You are a medical assistant. Your job is patient history taking. You are going to ask the patient about their symptoms and medical condition. Previous conversations: ${summary}`,
+      },
+      { role: "user", content: userMessage },
+    ];
+
+    console.log("Message being sent to GPT:", newMessages);
+
+    try {
+      const response = await openai.chat.completions.create({
+        model: "gpt-3.5-turbo",
+        messages: newMessages,
+      });
+
+      if (response.choices && response.choices.length > 0) {
+        const systemMessage = response.choices[0].message.content;
+
+        setPreviousConversation(
+          `${previousConversation} User: ${userMessage} Assistant: ${systemMessage} `
+        );
+
         setMessages((previousMessages) => [
           ...previousMessages,
-          { text: receivedMessage, user: { _id: 2 } },
+          { text: userMessage, user: { _id: 1 } },
         ]);
+
+        setMessages((previousMessages) => [
+          ...previousMessages,
+          { text: systemMessage, user: { _id: 2 } },
+        ]);
+
+        incrementQuestionCount(); // Increment question count after successfully sending a message
       } else {
         throw new Error(
-          `Failed to get successful response from OpenAI's chat API. Status: ${response.status}`
+          `Failed to get a successful response from OpenAI's chat API. Status: ${response.status}`
         );
       }
     } catch (error) {
@@ -68,9 +139,16 @@ const Chat = () => {
     }
   };
 
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      sendMessage();
+    }
+  };
+
   useEffect(() => {
-    //console.log(userInfo);
-    //getAllMessages();
+    // console.log(userInfo);
+    // getAllMessages();
   }, []);
 
   return (
@@ -83,7 +161,7 @@ const Chat = () => {
               src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"
               alt="profile"
             />
-            <h2>Someone</h2>
+            <h2>MedAid Chat</h2>
           </div>
           <div className="chat-messageBox">
             {messages.map((message, index) =>
@@ -93,7 +171,6 @@ const Chat = () => {
                 </div>
               ) : (
                 <div key={index} className={`chat-messages chat-othersMessage`}>
-                  {/* <img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png" alt="other user profile" /> */}
                   <p>{message.text}</p>
                 </div>
               )
@@ -105,6 +182,7 @@ const Chat = () => {
               type="text"
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
+              onKeyDown={handleKeyPress}
               placeholder="Type a message..."
               className="chat-inputField"
             />
@@ -119,6 +197,9 @@ const Chat = () => {
           </div>
         </div>
       </div>
+      {/* <div className="question-count">
+        <p>Number of Questions Asked: {questionCount}</p>
+      </div> */}
     </>
   );
 };
