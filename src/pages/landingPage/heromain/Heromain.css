@@ -1,0 +1,109 @@
+.heromain_background{
+    /* height: 50vw; */
+    background: linear-gradient(to bottom left, rgb(218,240,235), rgb(255,255,255));
+    /* background-color: blue; */
+    padding-bottom: 5vw;
+}
+
+.heromain{
+    height: 45vw;
+    display: flex;
+}
+.heromain_mainBox{
+    width: 74vw;
+    height: 20vw;
+    margin:auto;
+    text-align: center;
+}
+.heromain_mainBox h1{
+    font-size: 3.0vw;
+    font-weight: bold;
+    margin-bottom: 1.3vw;
+    color: rgb(52,58,57);
+    padding-top:1vw ;
+}
+.heromain_mainBox h2{
+    font-size: 1.7vw;
+    margin-bottom: 2.5vw;
+    color: rgb(95,95,95);
+}
+.heromain_buttonBox{
+    display: flex;
+    width: 86%;
+    margin: auto;
+}
+.heromain_buttonBox a{
+    width: 45%;
+    height: 3.5vw;
+    color:rgb(52,58,57);
+    border-radius: 3vw;
+    margin: auto;
+    display: flex;
+}
+.heromain_extensionButton{
+    border: 2px solid rgb(52,58,57);
+    transition: linear 0.1s;
+}
+.heromain_installButton{
+    background-color: rgb(9,111,88);
+    border: 2px solid rgb(9,111,88);
+    transition: linear 0.1s;
+}
+.heromain_buttonBox p{
+    font-size: 1.2vw;
+}
+
+.intro{
+    /* height: 45vw;
+    display: flex; */
+}
+.intro_mainBox{
+    width: 82vw;
+    height: 23.5vw;
+    margin:auto;
+    display: flex;
+}
+.intro_textBox{
+    width: 50%;
+}
+.intro_textBox h1{
+    font-size: 3vw;
+    color: rgb(52,58,57);
+    font-weight: 700;
+    margin-bottom: 1vw;
+    margin-top: 4.5vw;
+}
+.intro_textBox h2{
+    color:rgb(176,177,177);
+    font-size: 1.15vw;
+    width: 80%;
+    margin-bottom: 2.5vw;
+}
+.intro_imageBox{
+    width: 50%;
+}
+.intro_imageBox img{
+    height: 100%;
+    width: 100%;
+    border-radius: 2vw;
+}
+.intro_watchButton{
+    background-color: rgb(36,93,85);
+    color:white;
+    height: 3.4vw;
+    width: 15vw;
+    border-radius: 3vw;
+    font-size: 1.1vw;
+    transition: linear 0.1s;
+}
+.heromain_extensionButton:hover{
+    color: white;
+    background-color: rgb(9,111,88);
+    border: 2px solid rgb(52,58,57);
+}
+.intro_watchButton:hover{
+    background-color: rgb(9,111,88);
+}
+.heromain_installButton:hover{
+    background-color: rgb(122, 171, 80);
+}

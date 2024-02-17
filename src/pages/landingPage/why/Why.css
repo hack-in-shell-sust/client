@@ -1,0 +1,85 @@
+.why{
+    background: linear-gradient(to left, rgb(255,246,246), rgb(255,246,246));
+    height: 38vw;
+    display: flex;
+}
+.why_mainBox{
+    width: 82vw;
+    /* height: 49vw; */
+    margin: auto;
+    display: flex;
+    /* justify-content: space-between; */
+}
+.why_about{
+    width: 48%;
+    margin-right: 8%;
+}
+.why_about h1{
+    font-size: 3vw;
+    font-weight: bold;
+    color: rgb(60,60,60);
+    margin-bottom: 1vw;
+}
+.why_about p{
+    font-size: 1.15vw;
+    color: rgb(140,140,140);
+    margin-bottom: 5.5vw;
+    line-height: 2.4vw;
+}
+.why_ratingBox{
+    display: flex;
+    justify-content: space-between;
+    width: 65%;
+}
+.why_starIcon{
+    font-size: 1.3vw;
+    margin-right: 0.3vw;
+    color: rgb(255,199,40);
+    margin-bottom: 1.2vw;
+}
+.why_starIconGrey{
+    color: rgb(188,188,188);
+}
+.why_ratingBox h2{
+    margin-bottom: 0.7vw;
+    font-size: 1.3vw;
+}
+.why_ratingBox h3{
+    margin-bottom: 1.5vw;
+    font-size: 1.2vw;
+    color: rgb(140,140,140);
+}
+.why_ratingBox img{
+    height: 2vw;
+    aspect-ratio: 5;
+}
+
+.why_features{
+    width: 38%;
+}
+.why_featureIcon{
+    height: 4vw;
+    aspect-ratio: 1;
+    border-radius: 0.2vw;
+    background-color: white;
+    display: flex;
+    margin-right: 1vw;
+    box-shadow: 5px 5px 15px rgba(0,0,0,0.1);
+}
+.why_icon{
+    font-size: 2.2vw;
+    color: rgb(78, 164, 78);
+}
+
+.why_features h2{
+    color:rgb(60,60,60);
+    font-size: 1.8vw;
+    font-weight: bold;
+    margin-bottom: 0.5vw;
+}
+.why_features p{
+    color:rgb(140,140,140);
+    font-size: 1.2vw;
+    line-height: 1.8vw;
+    margin-bottom: 3vw;
+}
