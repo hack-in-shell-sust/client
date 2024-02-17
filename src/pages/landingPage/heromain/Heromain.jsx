@@ -56,7 +56,7 @@ const Heromain = () => {
     }
 
     const getMedicine = async () => { 
-        const apipath = 'http://192.168.238.113:8085/api/doctor/list'
+        const apipath = 'http://192.168.238.113:8085/api/medicine/list'
         try{
             const response = await axios.get(apipath); 
             console.log(response.data);
@@ -99,7 +99,7 @@ const Heromain = () => {
         <div className='heromain_inputBox'
             data-aos="fade-up" data-aos-delay="200" data-aos-anchor-placement="center-bottom"
         >
-            {(searchFilter === 'Medicine' || searchFilter === 'Doctor')?
+            {(searchFilter === 'Doctor')?
                 <div className='heromain_inputBoxSeachText'>
                 <Popover open={open} onOpenChange={setOpen} className="w-full h-full">
                     <PopoverTrigger asChild >
@@ -121,6 +121,51 @@ const Heromain = () => {
                         <CommandEmpty>No framework found.</CommandEmpty>
                         <CommandGroup>
                             {allDoctor && allDoctor.map((framework) => (
+                            <CommandItem
+                                key={framework.value}
+                                value={framework.value}
+                                onSelect={(currentValue) => {
+                                setValue(currentValue === value ? "" : currentValue)
+                                setOpen(false)
+                                }}
+                            >
+                                <Check
+                                className={cn(
+                                    "mr-2 h-4 w-4",
+                                    value === framework.value ? "opacity-100" : "opacity-0"
+                                )}
+                                />
+                                {framework.label}
+                            </CommandItem>
+                            ))}
+                        </CommandGroup>
+                        </Command>
+                    </PopoverContent>
+                </Popover>
+                </div>
+                :
+                (searchFilter === 'Medicine')?
+                <div className='heromain_inputBoxSeachText'>
+                <Popover open={open} onOpenChange={setOpen} className="w-full h-full">
+                    <PopoverTrigger asChild >
+                        <Button
+                        variant="ghost"
+                        role="combobox"
+                        aria-expanded={open}
+                        className="w-[100%] h-[100%] justify-between"
+                        >
+                        {value
+                            ? allMedicine.find((framework) => framework.value === value)?.label
+                            : `Select a ${searchFilter}`}
+                        <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                        </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-[200px] p-0">
+                        <Command>
+                        <CommandInput placeholder={`Select a ${searchFilter}`} />
+                        <CommandEmpty>No framework found.</CommandEmpty>
+                        <CommandGroup>
+                            {allMedicine && allMedicine.map((framework) => (
                             <CommandItem
                                 key={framework.value}
                                 value={framework.value}

@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button"
 
 import {useUserContext} from '../../context/UserContext';
 import NavigationBar from '../landingPage/navbar/NavigationBar';
+import axios from 'axios';
 
 const Profile = () => {
     const navigate = useNavigate();
@@ -17,6 +18,7 @@ const Profile = () => {
     const [height, setHeight] = useState("5.7");
     const [weigth, setWeight] = useState("65kg");
     const [dob, setDob] = useState("");
+    const [description, setDescription] = useState("");
     
     const logout = () => {
         localStorage.setItem('hackInShellAccessToken', '');
@@ -28,9 +30,59 @@ const Profile = () => {
         console.log(userInfo);
         if (Object.keys(userInfo).length == 0 && localStorage.getItem('hackInShellAccessToken') == '') {
             //navigate('/', { replace: true });
-            window.open("/", "_top");
+            //window.open("/", "_top");
         }
     }, [userInfo]);
+
+    const getInfo = async () => {
+        const apipath = 'http://192.168.238.42:8085/api/user/'
+        try{
+            const response = await axios.post(apipath,
+            {
+                email: JSON.parse((localStorage.getItem('hackInShellUser')).email)
+            }
+            ); 
+            if(response.data){
+
+            }
+        } catch (error) {
+            setPageLoading(false);
+            console.error("Error getting doctors:", error);
+            if (error.response) {
+              console.error("Response data:", error.response.data);
+            }
+        }    
+    }
+
+    
+    const updateInfo = async () => {
+        const apipath = 'http://192.168.238.42:8085/api/user/update'
+        try{
+            const response = await axios.post(apipath,
+            {
+                email: email,
+                name: firstName,
+                dateOfBirth: dob,
+                weigth: weigth,
+                heightL:height,
+                description: description,
+            }
+            ); 
+            if(response.data){
+
+            }
+        } catch (error) {
+            setPageLoading(false);
+            console.error("Error getting doctors:", error);
+            if (error.response) {
+              console.error("Response data:", error.response.data);
+            }
+        }    
+    }
+    
+    useEffect(() => {
+        //getInfo();
+    },[]);
 
   return (
     // <div className='profile'>
@@ -41,13 +93,13 @@ const Profile = () => {
     <>
         <NavigationBar />
         <div className='sm:flex justify-between w-[80vw] mx-auto mt-[4vw]'>
-            <div className="bg-red-600 p-6 max-w-[50vw] rounded-lg shadow-lg">
+            <div className=" p-6 max-w-[50vw] rounded-lg shadow-lg border">
                 <h1 className="text-lg font-semibold text-gray-700">Profile Page</h1>
                 <div className='flex gap-4 justify-end '>
                     <div className='w-[100%] flex flex-wrap justify-evenly'>
                         <div className="mt-4 w-[47%]">
                             <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="name">
-                                FIRST NAME
+                                NAME
                             </label>
                             <input
                                 className="shadow appearance-none  border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -55,19 +107,6 @@ const Profile = () => {
                                 type="text"
                                 placeholder="John Doe"
                                 value={firstName} onChange={(event) => {setFirstName(event.target.value);}}
-                            />
-                        </div>
-
-                        <div className="mt-4 w-[47%]" >
-                            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="display-name">
-                                LAST NAME
-                            </label>
-                            <input
-                                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                id="display-name"
-                                type="text"
-                                placeholder="Pixel_Master88"
-                                value={lastName} onChange={(event) => {setLastName(event.target.value);}}
                             />
                         </div>
                         
@@ -97,18 +136,45 @@ const Profile = () => {
                             />
                         </div>
 
-                        <div className="mt-4 w-[47%]">
-                            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="location">
-                                LOCATION
+                        <div className="mt-4 w-[47%]" >
+                            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="display-name">
+                                WEIGHT
                             </label>
-                            <select
-                                className="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
-                                id="location"
-                            >
-                                <option>Indonesia</option>
-                                {/* Other options would be here */}
-                            </select>
+                            <input
+                                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                id="display-name"
+                                type="text"
+                                placeholder="Pixel_Master88"
+                                value={weigth} onChange={(event) => {setWeight(event.target.value);}}
+                            />
                         </div>
+
+                        <div className="mt-4 w-[47%]" >
+                            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="display-name">
+                                HEIGHT
+                            </label>
+                            <input
+                                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                id="display-name"
+                                type="text"
+                                placeholder="Pixel_Master88"
+                                value={height} onChange={(event) => {setHeight(event.target.value);}}
+                            />
+                        </div>
+
+                        <div className="mt-4 w-[47%]" >
+                            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="display-name">
+                                DESCRIPTION
+                            </label>
+                            <input
+                                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                id="display-name"
+                                type="text"
+                                placeholder="Pixel_Master88"
+                                value={description} onChange={(event) => {setDescription(event.target.value);}}
+                            />
+                        </div>
+
                     </div>
                     {/*  */}
                 </div>
@@ -117,7 +183,7 @@ const Profile = () => {
                 </div>
             </div>
                 
-            <div className='bg-green-600 w-[20vw] rounded-lg text-center pb-[2vw]'>
+            <div className='w-[20vw] rounded-lg text-center pb-[2vw] border shadow-lg'>
                 <div className="w-[80%] h-[18vw] mx-auto my-[2vw] ">
                     <img  className="w-full h-full rounded-lg" src='doctors/image.jpeg' alt={'your image'} />
                 </div>
