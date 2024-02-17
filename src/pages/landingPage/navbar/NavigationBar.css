@@ -1,24 +1,20 @@
-.homepage_navigation{
-    position: relative;
-}
 @media screen and (min-width: 1024px) {
     .navigation{
-        height: 5.5vw;
+        height: 6vw;
         display: flex;
-        background-color: rgb(255,255,255);
-        /* background-color: red; */
+        background-color: rgb(47,119,111);
+        /*color: black; */
     }
     .logoBar{
-        width: 29%;
-        height: 100%;
+        width: 25%;
+        /* background-color: red; */
         display: flex;
+        align-items: center;
     }
     .logoBar img{
-        /* width: 55%; */
-        width: 42%;
+        width: 12vw;
         height: auto;
-        /* margin: auto; */
-        margin-left:20% ;
+        margin-left: 40%;
     }
     .navBarIconBar{
         visibility: hidden;
@@ -30,66 +26,51 @@
         display: none;
     }
     .navMain{
-        width: 72vw;
+        width: 75%;
     }
     .navMenu{
+        /* width: 63%; */
         height: 100%;
-        color: black;
+        color: white;
         display: flex;
         margin: auto;
-
+        padding-left: 6.5vw;
+        padding-right: 8vw;
+        justify-content: space-between;
     }
 
     .navSubMenu{
-        width: 34vw;
-        margin-left: 6.5vw;
-        margin-right: 0;
-        /* background-color: blue; */
+        width: 42%;
         display: flex;
         justify-content: space-between;
-        align-items: center;
-        
+        padding-right: 2%;
     }
     .navMenuPageLinks{
-        font-size: 1vw;
+        font-size: 1.1vw;
         transition: linear 0.1s;
         cursor: pointer;
-        /* background-color: pink; */
     }
-    .navMenuPageLinksWhy{
-        /* background-color: red; */
-        height: 5.5vw;
+    .watchButton{
         display: flex;
-        align-items: center;
-
-
-    }
-    /* .navbar_login{
-        font-size: 1.vw;
-        font-weight: 600;
-        width: 5vw;
-        text-align: left;
-        margin-left: 5vw;
-        
-    } */
-    .navbar_login{
-        background-color: rgb(9,111,88);
-        font-size: 1.vw;
-        padding: 0.8vw 1.3vw;
-        border-radius: 0.7vw;
-        text-align: left;
-        color: white;
-    }
-    
-    .navbar_getLink{
-        width: 17vw;
-        height: 3vw;
+        width: 16vw;
+        /* height: 48%; */
+        padding: 16px 0;
         border-radius: 3vw;
-        background-color: rgb(9,111,88);
-        color:white;
+        border: 1px solid white;
+        font-weight: 700;
+        font-size: 1.2vw;
+        transition: linear 0.2s;
+        cursor: pointer;
+    }
+    .tryLink{
+        /* width: 10vw; */
+        /* height: 48%; */
+        padding: 1vw 2.5vw;
+        border-radius: 3vw;
+        background-color: rgba(255,255,255);
+        color:rgb(42, 106, 98);
         font-weight: 600;
-        font-size: 1vw;
-        transition: linear 0.1s;
+        font-size: 1.2vw;
     }
 }
 @media screen and (min-width: 768px) and (max-width: 1023px) {
@@ -300,8 +281,7 @@
 }
 
 .navMenuPageLinks:hover{
-    color: rgb(9,111,88);
-    font-weight: 500;
+    color: rgb(255,0,122);
 }
 
 .watchButton:hover{
@@ -311,50 +291,7 @@
 .tryLink:hover{
     background-color: rgb(37,90,84);
     color: white;
-    
 }
 .navBurgerIcon:active{
     transform: scale(0.8);
-}
-
-
-.homepage_navigation_submenu{
-    width: 47vw;
-    height: 24vw;
-    background-color: white;
-    position: absolute;
-    margin-left: 19vw;
-    display: flex;
-    justify-content: space-between;
-    padding: 2vw 10vw 2vw 6vw;
-    /* display: none; */
-}
-.homepage_navigation_submenuToggle{
-    display: block;
-}
-
-.homepage_navigation_submenuOverview{
-    display: flex;
-    flex-direction: column;
-}
-.homepage_navigation_submenuOverview h2{
-    font-size: 1.1vw;
-    font-weight: 600;
-    color: rgba(40,40,40);
-    margin-bottom: 1.3vw;
-}
-.homepage_navigation_submenuOverview a{
-    font-size: 0.85vw;
-    margin-bottom:0.8vw;
-    padding-left: 0.7vw;
-
-}
-.homepage_navigation_submenuOverview a:hover{
-    color: grey;
-}
-.navbar_getLink:hover{
-    background-color: rgb(112, 139, 87);
-}
-.navbar_login:hover{
-    background-color: rgb(9,111,88,0.8);
 }

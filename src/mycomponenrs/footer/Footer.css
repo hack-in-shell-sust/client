@@ -1,0 +1,116 @@
+.footer{
+    /* height: 35vw; */
+    /* color: rgb(140,140,140); */
+    padding-top: 2vw;
+    padding-bottom: 2vw;
+    color: white;
+    background-color: rgb(47,119,111);
+}
+.footer_mainBox{
+    display: flex;
+    width: 82%;
+    margin: auto;
+}
+.footer_contacts{
+    width: 47%;
+}
+.footer_contacts img{
+    height: 4vw;
+    width: 12vw;
+    margin-bottom: 1.2vw;
+}
+.footer_contacts h2{
+    width: 65%;
+    font-size: 1.05vw;
+    line-height: 1.9vw;
+    margin-bottom: 2.7vw;
+}
+.footer_contact{
+    display: flex;
+    margin-bottom: 1.6vw;
+}
+.footer_contact p{
+    margin-bottom:0.7vw;
+}
+.footer_contact_icon{
+    font-size: 1.7vw;
+    margin-right:0.7vw ;
+}
+.footer_support{
+    width: 35%;
+    display: flex;
+    flex-direction: column;
+
+}
+.footer_support h2{
+    font-size: 1.1vw;
+    font-weight: 600;
+    margin-bottom: 2vw;
+    margin-top: 0.6vw;
+}
+.footer_support a{
+    margin-bottom:1.6vw;
+}
+.footer_solution{
+    display: flex;
+    flex-direction: column;
+}
+.footer_solution h2{
+    font-size: 1.1vw;
+    font-weight: 600;
+    margin-bottom: 2vw;
+    margin-top: 0.6vw;
+}
+.footer_solution a{
+    margin-bottom:1.6vw;
+}
+.footer_download{
+    width: 26%;
+}
+.footer_download_mainBox{
+    background-color: rgb(217,217,217);
+    width: 100%;
+    aspect-ratio: 1;
+    border-radius: 2vw;
+    margin-top:0.5vw ;
+    padding: 2.2vw 2.1vw;
+}
+.footer_download_mainBox p{
+    font-size: 1vw;
+    margin-bottom: 0.8vw;
+}
+.footer_download_mainBox h2{
+    font-size: 1.3vw;
+    font-weight: 600;
+}
+
+.footer_download_mainBoxButton{
+    background-color:rgb(39,90,84);
+    width: 80%;
+    margin: auto;
+    color: white;
+    display: flex;
+    justify-content: center;
+    font-weight: 600;
+    /* padding: 1.5vw; */
+    height: 5vw;
+    align-items: center;
+    border-radius: 3vw;
+    margin-top: 2vw;
+    transition: linear 0.1s;
+}
+
+/* .footer_download_mainBox p{
+    font-size: 1.2vw;
+} */
+.footer_download_mainBoxIcon{
+    font-size: 1.8vw;
+    margin-right:0.5vw ;
+}
+
+.footer a:hover{
+    color: black;
+}
+.footer_download_mainBoxButton:hover{
+    background-color:rgb(79, 160, 151);
+}

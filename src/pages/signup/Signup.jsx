@@ -9,6 +9,7 @@ import {useUserContext} from '../../context/UserContext';
 
 const Signup = () => {
     const [userName, setUserName] = useState("");
+    const [lastName, setLastName] = useState("");
     const [userEmail, setUserEmail] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
@@ -21,6 +22,9 @@ const Signup = () => {
     const loginUser = () => {         
         setSignupStatus("please wait...");
         
+        if(userName === "" || userName == null || userName === undefined){
+            setSignupStatus("Name is empty");
+        }
         if(userName === "" || userName == null || userName === undefined){
             setSignupStatus("Name is empty");
         }
@@ -44,10 +48,13 @@ const Signup = () => {
         //      window.location.href = "/dashboardadmin";
         // }
         else{
-            const apipath = `${process.env.REACT_APP_API_URI}/user/login`;
+            // const apipath = `${process.env.REACT_APP_API_URI}/user/login`;
+            const apipath = 'http://192.168.238.113:8085/api/auth/signup/user'
             Axios.post(apipath, 
             {
-                name:userName,
+                firstName:userName,
+                lastName: lastName,
+                email: userEmail,
                 password:password
             }
             ).then((response) =>{
@@ -56,29 +63,30 @@ const Signup = () => {
                 // console.log(response.data);
                 setSignupStatus("please wait");
                 if(response.data){
-                    const userObj=response.data.user;
+                    const userObj=jwtDecode(response.data.data.token);
                     setUserInfo(userObj);
-                    console.log(userInfo);
                     localStorage.setItem('hackInShellUser', JSON.stringify(userObj));
-                    localStorage.setItem('hackInShellAccessToken', response.data.token);
+                    localStorage.setItem('hackInShellAccessToken', response.data.data.token);
                 }
                 else{
-                    setSignupStatus("Wrong id or password");
+                    setSignupStatus("Name already taken");
                 }
             })
             .catch(error => {
                 //console.error(error);
+                setSignupStatus("Name already taken");
                 if (error.response && error.response.status === 401) {
-                    setSignupStatus("Wrong id or password");
+                    // setSignupStatus("Name already taken");
                     // Perform appropriate action, such as redirecting to login page
                 } else {
-                    // Handle other errors
+                    // setSignupStatus("Name already taken");
                     console.log("Error:", error.message);
                 }
             });
         };
 
         setUsername('');
+        setLastname('');
         setUserEmail('');
         setPassword('');
         setConfirmPassword('')
@@ -95,12 +103,13 @@ const Signup = () => {
     <div className='signup'>
         <div className='signup_mainBox'>
             <h2>Signup User</h2>
-            <Input type="text" placeholder="Insert Username" value={userName} onChange={(event) => {setUserName(event.target.value);}}/>
+            <Input type="text" placeholder="Insert First name" value={userName} onChange={(event) => {setUserName(event.target.value);}}/>
+            <Input type="text" placeholder="Insert Last name" value={lastName} onChange={(event) => {setLastName(event.target.value);}}/>
             <Input type="email" placeholder="Insert Email" value={userEmail} onChange={(event) => {setUserEmail(event.target.value);}}/>
             <Input type="password" placeholder="Insert Password" value={password} onChange={(event) => {setPassword(event.target.value);}}/>
             <Input type="password" placeholder="Confirm Password" value={confirmPassword} onChange={(event) => {setConfirmPassword(event.target.value);}}/>
             <p>{signupStatus}</p>
-            <Button variant="outline" onClick={()=>loginUser()}>Button</Button>
+            <Button variant="outline" onClick={()=>loginUser()}>Save</Button>
             <Link to="/login" className="signup_signToLog">Already Have an account? log in </Link>
         </div>
     </div>
