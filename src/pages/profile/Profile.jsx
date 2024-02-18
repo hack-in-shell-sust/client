@@ -12,11 +12,11 @@ const Profile = () => {
     const navigate = useNavigate();
     const {userInfo, setUserInfo} = useUserContext();
 
-    const [firstName, setFirstName] = useState("abir");
-    const [lastName, setLastName] = useState("hossain");
-    const [email, setEmail] = useState("abir9@gmail.com");
-    const [height, setHeight] = useState("5.7");
-    const [weigth, setWeight] = useState("65kg");
+    const [firstName, setFirstName] = useState("");
+    const [lastName, setLastName] = useState("");
+    const [email, setEmail] = useState("");
+    const [height, setHeight] = useState("");
+    const [weigth, setWeight] = useState("");
     const [dob, setDob] = useState("");
     const [description, setDescription] = useState("");
     
@@ -27,26 +27,31 @@ const Profile = () => {
     }
 
     useEffect(() => {
-        console.log(userInfo);
+        //console.log(userInfo);
         if (Object.keys(userInfo).length == 0 && localStorage.getItem('hackInShellAccessToken') == '') {
             //navigate('/', { replace: true });
-            //window.open("/", "_top");
+            window.open("/", "_top");
         }
     }, [userInfo]);
 
     const getInfo = async () => {
-        const apipath = 'http://192.168.238.42:8085/api/user/'
+        const apipath = 'http://192.168.238.42:8085/api/user'
         try{
             const response = await axios.post(apipath,
             {
-                email: JSON.parse((localStorage.getItem('hackInShellUser')).email)
+                email: userInfo.email,
             }
             ); 
             if(response.data){
-
+                console.log(response.data);
+                setName(response.data.name);
+                setDob(response.data.dateOfBirth);
+                setHeight(response.data.height)
+                setWeight(response.data.weigth)
+                setDescription(response.data.description);
             }
         } catch (error) {
-            setPageLoading(false);
+            // setPageLoading(false);
             console.error("Error getting doctors:", error);
             if (error.response) {
               console.error("Response data:", error.response.data);
@@ -56,11 +61,12 @@ const Profile = () => {
 
     
     const updateInfo = async () => {
+        // alert("taf");
         const apipath = 'http://192.168.238.42:8085/api/user/update'
         try{
             const response = await axios.post(apipath,
             {
-                email: email,
+                email: userInfo.email,
                 name: firstName,
                 dateOfBirth: dob,
                 weigth: weigth,
@@ -68,11 +74,12 @@ const Profile = () => {
                 description: description,
             }
             ); 
-            if(response.data){
-
+            if(response){
+                console.log(response);
+                navigate('/', { replace: true });
             }
         } catch (error) {
-            setPageLoading(false);
+            // setPageLoading(false);
             console.error("Error getting doctors:", error);
             if (error.response) {
               console.error("Response data:", error.response.data);
@@ -81,7 +88,7 @@ const Profile = () => {
     }
     
     useEffect(() => {
-        //getInfo();
+        getInfo();
     },[]);
 
   return (
@@ -110,7 +117,7 @@ const Profile = () => {
                             />
                         </div>
                         
-                        <div className="mt-4 w-[47%]">
+                        {/* <div className="mt-4 w-[47%]">
                             <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="email">
                                 E-MAIL
                             </label>
@@ -121,7 +128,7 @@ const Profile = () => {
                                 placeholder="johndoe@gmail.com"
                                 value={email} onChange={(event) => {setFEmail(event.target.value);}}
                             />
-                        </div>
+                        </div> */}
 
                         <div className="mt-4 w-[47%]">
                             <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="what-i-do">
@@ -179,7 +186,7 @@ const Profile = () => {
                     {/*  */}
                 </div>
                 <div className='flex mt-4 justify-center'>
-                    <Button className='hover:bg-blue-700 mt-[2vw]'>Save Changes</Button>
+                    <Button className='hover:bg-blue-700 mt-[2vw]' onClick={()=>updateInfo()}>Save Changes</Button>
                 </div>
             </div>
                 
@@ -190,7 +197,7 @@ const Profile = () => {
                 <h2 className='font-semibold'>{firstName} {lastName}</h2>
                 <p>{email}</p>
                 <p>{dob}</p>
-                <Button className='bg-white text-black hover:bg-gray-300 w-[8vw] mt-[1vw] font-semibold' onClick={()=>logout()}>log out</Button>
+                <Button className='bg-black text-white hover:bg-gray-300 w-[8vw] mt-[1vw] font-semibold' onClick={()=>logout()}>log out</Button>
             </div>
         </div>
     </>

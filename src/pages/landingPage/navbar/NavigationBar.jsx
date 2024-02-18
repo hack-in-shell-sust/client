@@ -121,9 +121,9 @@ const NavigationBar = () => {
                   <Link to="/doctors" className="navMenuPageLinks">
                     Doctor
                   </Link>
-                  <Link to="/profile" className="navMenuPageLinks">
+                  {/* <Link to="/profile" className="navMenuPageLinks">
                     Profile
-                  </Link>
+                  </Link> */}
                 </div>
                 <Link to='/profile' className="my-auto tryLink">
                   {JSON.parse(localStorage.getItem("hackInShellUser")).email}

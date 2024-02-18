@@ -20,7 +20,7 @@ const DoctorCard = ({ name, contact, description, isOnlineBookable, rating, long
       <div className='flex gap-4'>
         <div className="w-[8vw] h-[11vw]">
           <img className="w-full h-[8.5vw]" src='/doctors/image.jpeg' alt={'your image'} />
-          <Button className='hover:bg-blue-700 w-[100%] h-2.5vw]' onClick={() => goToMap(90.37921708900197, 23.948376516259003, "tafsir")}>Find on map</Button>
+          <Button className='hover:bg-blue-700 w-[100%] h-2.5vw]' onClick={() => goToMap(latitude, longitude, name)}>Find on map</Button>
         </div>
         <div className="doctorcard_textBox">
           <h3 className="text-lg text-white font-semibold">{name}</h3>

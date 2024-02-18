@@ -18,6 +18,8 @@ const Chat = () => {
   const [fineTuneResult, setFineTuneResult] = useState(null);
   const [questionCount, setQuestionCount] = useState(0);
 
+  const synthesis = window.speechSynthesis
+
   useEffect(() => {
     // Function to perform asynchronous tasks
     const initializeChat = async () => {
@@ -150,6 +152,31 @@ const Chat = () => {
     // console.log(userInfo);
     // getAllMessages();
   }, []);
+
+
+  const [speaking, setSpeaking] = useState(false);
+
+  const speak = () => {
+    if (!synthesis) {
+      console.error('Speech synthesis not supported');
+      return;
+    }
+
+    const utterance = new SpeechSynthesisUtterance(text);
+    synthesis.speak(utterance);
+    setSpeaking(true);
+
+    utterance.onend = () => {
+      setSpeaking(false);
+    };
+  };
+
+  const stopSpeaking = () => {
+    if (synthesis && synthesis.speaking) {
+      synthesis.cancel();
+      setSpeaking(false);
+    }
+  };
 
   return (
     <>

@@ -12,7 +12,7 @@ const Work = () => {
     {
       id: 2,
       image: '/heromain/contact.png',
-      title: "SYMPTOM asfnsdfn",
+      title: "SYMPTOM analysis",
       text: "Participate in the programming contest and win amazing prizes",
       link: 'https://www.facebook.com/photo/?fbid=678385977661873&set=a.553298473503958',
     },

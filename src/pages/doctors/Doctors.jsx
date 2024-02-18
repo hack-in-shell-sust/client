@@ -62,8 +62,8 @@ const DoctorList = () => {
             rating: doctor[5],
             clinicId: doctor[6],
             clinicName: doctor[7],
-            longitude: doctor[8],
-            latitude: doctor[9],
+            latitude: doctor[8],
+            longitude: doctor[9],
             distance: doctor[10]
           }));
           setAllDoctors(formattedDoctors);
@@ -108,9 +108,9 @@ const DoctorList = () => {
               clinic={doctor.clinicName}
             />
           ))}
-          <DoctorCard
+          {/* <DoctorCard
             
-            />
+            /> */}
       </div>
     </>
   );

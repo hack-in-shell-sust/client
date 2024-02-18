@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-
+import { useNavigate } from 'react-router-dom';
 import './Heromain.css';
 import { Check, ChevronsUpDown } from "lucide-react"
  
@@ -37,7 +37,7 @@ const Heromain = () => {
     const [allMedicine, setAllMedicine] = useState('');
     
     const getDoctors = async () => { 
-        const apipath = 'http://192.168.238.113:8085/api/doctor/list'
+        const apipath = 'http://192.168.238.42:8085/api/doctor/list'
         try{
             const response = await axios.get(apipath); 
             console.log(response.data);
@@ -56,7 +56,7 @@ const Heromain = () => {
     }
 
     const getMedicine = async () => { 
-        const apipath = 'http://192.168.238.113:8085/api/medicine/list'
+        const apipath = 'http://192.168.238.42:8085/api/medicine/list'
         try{
             const response = await axios.get(apipath); 
             console.log(response.data);
@@ -76,8 +76,19 @@ const Heromain = () => {
 
     useEffect(() => {
         if(searchFilter == 'Doctor')getDoctors();
-        // else if(searchFilter == 'Medicine')getMedicine();
+        else if(searchFilter == 'Medicine')getMedicine();
     }, [searchFilter]);
+    useEffect(() => {
+        getMedicine();
+    }, []);
+
+    const navigate = useNavigate();
+
+  const goToDoctorProfile = (doctor) => {
+    alert("hi")
+
+    navigate(`/ddoctorprofile?${doctor.id}`);
+  };
 
   return (
     <div className='heromain_background'>
@@ -128,7 +139,7 @@ const Heromain = () => {
                                 setValue(currentValue === value ? "" : currentValue)
                                 setOpen(false)
                                 }}
-                            >
+                                >
                                 <Check
                                 className={cn(
                                     "mr-2 h-4 w-4",

@@ -14,6 +14,7 @@ import {UserProvider} from './context/UserContext';
 import MapPage from './pages/mapPage/MapPage';
 import GazeRecorder from './pages/gaze/GazeRecorder';
 import MapDoctor from './pages/mapPage/MapDoctor';
+import DoctorProfile from './pages/doctors/DoctorProfile';
 
 
 const App = () => {
@@ -57,7 +58,7 @@ const App = () => {
             <Route path="/mapdoctor" element={ <MapDoctor/>} />
             <Route path="/doctors" element={ <Doctors/>} />
             <Route path="/gazerecorder" element={ <GazeRecorder/>} />
-            
+            <Route path="/doctorprofile" element={ <DoctorProfile/>} />
 
           </Routes>
         </UserProvider>
