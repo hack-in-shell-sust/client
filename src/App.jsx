@@ -15,6 +15,7 @@ import MapPage from './pages/mapPage/MapPage';
 import GazeRecorder from './pages/gaze/GazeRecorder';
 import MapDoctor from './pages/mapPage/MapDoctor';
 import DoctorProfile from './pages/doctors/DoctorProfile';
+import MapDoctors from './pages/mapPage/MapDoctors';
 
 
 const App = () => {
@@ -54,7 +55,8 @@ const App = () => {
             {/* <Route path="/profile" element={checkToken() ? <Navigate to="/login" /> : <Profile/>} /> */}
             <Route path="/profile" element={ <Profile/>} />
             {/* <Route path="/map" element={checkToken() ? <Navigate to="/login" /> : <MapPage/>} /> */}
-            <Route path="/map" element={<MapPage/>} />
+            {/* <Route path="/map" element={<MapPage/>} /> */}
+            <Route path="/map" element={<MapDoctors/>} />
             <Route path="/mapdoctor" element={ <MapDoctor/>} />
             <Route path="/doctors" element={ <Doctors/>} />
             <Route path="/gazerecorder" element={ <GazeRecorder/>} />

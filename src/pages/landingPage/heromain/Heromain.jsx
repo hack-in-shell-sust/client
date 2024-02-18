@@ -85,9 +85,9 @@ const Heromain = () => {
     const navigate = useNavigate();
 
   const goToDoctorProfile = (doctor) => {
-    alert("hi")
-
-    navigate(`/ddoctorprofile?${doctor.id}`);
+    //alert("hi")
+    const id = doctor.id;
+    navigate(`/doctorprofile?id=${id}`);
   };
 
   return (
@@ -138,7 +138,9 @@ const Heromain = () => {
                                 onSelect={(currentValue) => {
                                 setValue(currentValue === value ? "" : currentValue)
                                 setOpen(false)
+                                goToDoctorProfile(framework)
                                 }}
+                                // onClick={()=>goToDoctorProfile()}
                                 >
                                 <Check
                                 className={cn(

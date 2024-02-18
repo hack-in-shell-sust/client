@@ -1,9 +1,11 @@
-.title {
-    font-size: 2vw;
-    font-weight: 700;
-    width: 70%;
-    margin: auto;
-    margin-bottom: 1.5vw;
-    padding-top: 12vh;
-  }
+
+  .custom-marker {
+    width: 120px; /* Adjust the width as needed */
+    height: 120px; /* Adjust the height as needed */
+    background-color: red; /* Set the background color to red */
+    border-radius: 50%; /* Ensure the marker is circular */
+    border: 2px solid white; /* Add a border for better visibility */
+    cursor: pointer; /* Set cursor to pointer for better interaction */
+}
+
   

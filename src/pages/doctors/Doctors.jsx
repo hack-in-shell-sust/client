@@ -5,6 +5,7 @@ import NavigationBar from '../landingPage/navbar/NavigationBar';
 import axios from 'axios';
 import './Doctors.css'
 import Loading from '@/mycomponenrs/loading/Loading';
+import { Button } from '@/components/ui/button';
 
 // const doctors = [
 //   { id: 1, name: 'Dr. Jane Doe', specialty: 'Cardiologist', imageUrl: 'doctors/image1.jpg' , booked: true},
@@ -14,12 +15,13 @@ import Loading from '@/mycomponenrs/loading/Loading';
 // ];
 
 const DoctorList = () => {
-
+  const navigate = useNavigate();
   const [latitude, setLatitude] = useState(0.0);
   const [longitude, setLongitude] = useState(0.0);
   const [pageLoading, setPageLoading] = useState(true);
 
   const [allDoctors, setAllDoctors] = useState([]);
+  const [marker, setMarker] = useState([]);
 
   useEffect(() => {
       // Check if geolocation is supported by the browser
@@ -67,6 +69,7 @@ const DoctorList = () => {
             distance: doctor[10]
           }));
           setAllDoctors(formattedDoctors);
+          setMarker(formattedDoctors.map(doctor => ({latitude: doctor.latitude, longitude: doctor.longitude})));
           console.log(formattedDoctors);
         }
         
@@ -89,6 +92,7 @@ const DoctorList = () => {
   //     <Loading/>
   //   )
   // }
+
 
 
   return (
