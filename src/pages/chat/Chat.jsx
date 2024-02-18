@@ -9,7 +9,7 @@ const openai = new OpenAI({
   dangerouslyAllowBrowser: true,
 });
 
-const MAX_QUESTION_COUNT = 10;
+const MAX_QUESTION_COUNT = 5;
 
 const Chat = () => {
   const [messages, setMessages] = useState([]);
@@ -81,23 +81,77 @@ const Chat = () => {
 
   const sendMessage = async () => {
     if (questionCount >= MAX_QUESTION_COUNT) {
-      // Reached the maximum allowed questions, handle accordingly
-      console.log("Maximum question limit reached.");
-      return;
+      // Reached the maximum allowed questions, send a closing message
+      console.log("Maximum question limit reached. Ending the conversation.");
+
+      try {
+        // Generate a summary of the entire conversation
+        const summary = await getSummary(previousConversation);
+
+        // Create a closing message thanking the user and providing the summary
+        const closingPrompt = `Thank you for your time! Here is a summary of our conversation: ${summary}`;
+
+        const closingResponse = await openai.chat.completions.create({
+          model: "gpt-3.5-turbo",
+          messages: [
+            {
+              role: "system",
+              content: `You are a medical assistant. Your job is patient history taking. Ending the conversation. Provide the user a brief summary of the conversation : ${summary}`,
+            },
+            // { role: "user", content: closingPrompt },
+          ],
+        });
+
+        if (closingResponse.choices && closingResponse.choices.length > 0) {
+          const closingSystemMessage =
+            closingResponse.choices[0].message.content;
+
+          setPreviousConversation(
+            `${previousConversation} User: ${closingPrompt} Assistant: ${closingSystemMessage} `
+          );
+
+          // setMessages((previousMessages) => [
+          //   ...previousMessages,
+          //   { text: closingPrompt, user: { _id: 1 } },
+          // ]);
+
+          setMessages((previousMessages) => [
+            ...previousMessages,
+            { text: closingSystemMessage, user: { _id: 2 } },
+          ]);
+
+          // Set a flag to indicate the conversation is ending
+          setIsConversationEnding(true);
+        } else {
+          throw new Error(
+            `Failed to get a successful response for the closing prompt. Status: ${closingResponse.status}`
+          );
+        }
+      } catch (error) {
+        console.error("Error sending closing message:", error);
+        if (error.response) {
+          console.error("Response data:", error.response.data);
+        }
+      }
+
+      return; // Exit the function after sending the closing message
     }
 
     const userMessage = inputValue;
     setInputValue("");
 
-    const summary = await getSummary(previousConversation);
-    console.log("Summary:", summary);
-
     const newMessages = [
       {
         role: "system",
-        content: `You are a medical assistant. Your job is patient history taking. You are going to ask the patient about their symptoms and medical condition. Previous conversations: ${summary}`,
+        content: `You are a medical assistant. Your job is patient history taking. Ask only one question at a time. Previous conversations: ${previousConversation}`,
       },
       { role: "user", content: userMessage },
+      // Add an additional system message after the user's final message
+      {
+        role: "system",
+        content:
+          "Thank you for providing the necessary information. I will now summarize our conversation.",
+      },
     ];
 
     console.log("Message being sent to GPT:", newMessages);
