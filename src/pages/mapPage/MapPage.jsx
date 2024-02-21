@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import mapboxgl from 'mapbox-gl';
 import "mapbox-gl/dist/mapbox-gl.css";
 
@@ -7,6 +7,7 @@ import NavigationBar from '../landingPage/navbar/NavigationBar';
 
 
 const MapPage = ({markers}) => {
+  //const [markers, setMarkers] = useState([]);
   const mapContainerRef = useRef(null);
   const mapboxAccessToken = import.meta.env.VITE_MAPBOX_TOKEN;
 
@@ -22,48 +23,35 @@ const MapPage = ({markers}) => {
       zoom: 7 // Initial zoom level
     });
 
-    // Add a marker as an example
+    //Add a marker as an example
     // const marker = new mapboxgl.Marker({ color: 'red' })
     //   .setLngLat([90.37921708900197, 23.948376516259003])
     //   .addTo(map);
     
-  
-    
-  //   markers.forEach(marker => {
-  //     new mapboxgl.Marker({
-  //         color: 'red', // Set marker color to red
-  //         scale: 5.5 // Increase marker size (default is 1)
-  //     }).setLngLat([marker.longitude, marker.latitude])
-  //     .setPopup(
-  //         new mapboxgl.Popup().setText(marker.doctorName)
-  //     )
-  //     .addTo(map);
-  // });
-
-  markers.forEach(marker => {
-    // Create a custom marker element
-    const el = document.createElement('div');
-    el.className = 'custom-marker';
-    el.style.width = '20px'; // Adjust the width as needed
-    el.style.height = '20px'; // Adjust the height as needed
-    el.style.backgroundColor = 'red'; // Set the background color to red
-    el.style.borderRadius = '50%'; // Ensure the marker is circular
-    el.style.border = '2px solid white'; // Add a border for better visibility
-    el.style.cursor = 'pointer'; // Se
-
-    // Set the marker position and add it to the map
-    new mapboxgl.Marker(el)
-        .setLngLat([marker.longitude, marker.latitude])
+    markers.forEach(marker => {
+        new mapboxgl.Marker({
+            color: 'red', // Set marker color to red
+            scale: 1 // Increase marker size (default is 1)
+        }).setLngLat([marker.longitude, marker.latitude])
         .setPopup(
             new mapboxgl.Popup().setText(marker.doctorName)
         )
         .addTo(map);
-});
-  
+    });
   
       // Cleanup
       return () => map.remove();
-  }, []);
+  }, [markers, mapboxAccessToken]);
+
+  // useEffect(() => {
+  //   // Add initial markers
+  //   setMarkers([
+  //     { longitude: 90.37921708900197, latitude: 23.948376516259003, doctorName: "Abir Hossain" },
+  //     { longitude: 90.4, latitude: 23.9, doctorName: "Tafsir Rahman" }, // Additional marker
+  //     { longitude: 90.45, latitude: 23.85, doctorName: "Will smith" }, // Additional marker
+  //     // Add more markers as needed
+  //   ])
+  // } ,[]);
 
   return (
     <>

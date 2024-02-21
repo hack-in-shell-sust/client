@@ -53,8 +53,8 @@ const MapDoctors = () => {
                     distance: doctor[10]
                 }));
                 setAllDoctors(formattedDoctors);
-                console.log(formattedDoctors);
-                marker = formattedDoctors.map(doctor => ({latitude: doctor.latitude, longitude: doctor.longitude}));
+                //console.log(formattedDoctors);
+                marker = formattedDoctors.map(doctor => ({latitude: doctor.latitude, longitude: doctor.longitude, doctorName:doctor.name}));
                 console.log(marker);
               }
             
