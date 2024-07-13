@@ -35,7 +35,7 @@ const Profile = () => {
     }, [userInfo]);
 
     const getInfo = async () => {
-        const apipath = 'http://192.168.238.42:8085/api/user'
+        const apipath = 'http://172.27.32.35:8080/api/user'
         try{
             const response = await axios.post(apipath,
             {
@@ -62,7 +62,7 @@ const Profile = () => {
     
     const updateInfo = async () => {
         // alert("taf");
-        const apipath = 'http://192.168.238.42:8085/api/user/update'
+        const apipath = 'http://172.27.32.35:8080/api/user/update'
         try{
             const response = await axios.post(apipath,
             {

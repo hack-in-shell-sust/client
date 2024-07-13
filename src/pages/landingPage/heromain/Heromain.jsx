@@ -37,7 +37,7 @@ const Heromain = () => {
     const [allMedicine, setAllMedicine] = useState('');
     
     const getDoctors = async () => { 
-        const apipath = 'http://192.168.238.42:8085/api/doctor/list'
+        const apipath = 'http://172.27.32.35:8080/api/doctor/list'
         try{
             const response = await axios.get(apipath); 
             console.log(response.data);
@@ -56,7 +56,7 @@ const Heromain = () => {
     }
 
     const getMedicine = async () => { 
-        const apipath = 'http://192.168.238.42:8085/api/medicine/list'
+        const apipath = 'http://172.27.32.35:8080/api/medicine/list'
         try{
             const response = await axios.get(apipath); 
             console.log(response.data);

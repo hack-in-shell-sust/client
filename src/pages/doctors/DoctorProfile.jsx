@@ -14,7 +14,7 @@ const DoctorProfile = () => {
         const fetchDoctorInfo = async () => {
             console.log(id);
             try {
-                const response = await axios.post(`http://192.168.238.42:8085/api/doctor/info`, { 
+                const response = await axios.post(`http://172.27.32.35:8080/api/doctor/info`, { 
                     id: id,
 
                 });

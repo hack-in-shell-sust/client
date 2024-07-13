@@ -21,7 +21,7 @@ const Signup = () => {
     const {userInfo, setUserInfo} = useUserContext();
 
     const createUser = async (data) => {
-        const apipath = 'http://192.168.238.42:8085/api/user/create'
+        const apipath = 'http://172.27.32.35:8080/api/user/create'
         try{
             const response = await axios.post(apipath,
                 {
@@ -70,7 +70,7 @@ const Signup = () => {
         // }
         else{
             // const apipath = `${process.env.REACT_APP_API_URI}/user/login`;
-            const apipath = 'http://192.168.238.42:8085/api/auth/register/user'
+            const apipath = 'http://172.27.32.35:8080/api/auth/register/user'
             axios.post(apipath, 
             {
                 // firstName:userName,
